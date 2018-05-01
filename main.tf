@@ -100,7 +100,7 @@ resource "aws_alb" "main" {
   access_logs {
     enabled = true
     bucket  = "${var.logs_s3_bucket}"
-    prefix  = "alb-${var.name}-${var.environment}"
+    prefix  = "alb/${var.name}-${var.environment}"
   }
 
   tags = {
