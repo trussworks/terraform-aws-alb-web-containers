@@ -13,6 +13,11 @@ output "alb_http_target_group_id" {
   value       = "${join("", aws_alb_target_group.http.*.id)}"
 }
 
+output "alb_arn" {
+  description = "The ARN of the ALB."
+  value       = "${aws_alb.main.arn}"
+}
+
 output "alb_dns_name" {
   description = "DNS name of the ALB."
   value       = "${aws_alb.main.dns_name}"
