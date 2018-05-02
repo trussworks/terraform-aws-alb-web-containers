@@ -35,6 +35,18 @@ variable "https_container_health_check_path" {
   default     = "/"
 }
 
+variable "http_container_success_codes" {
+  description = "The HTTP codes to use when checking for a successful response from the HTTP container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299')."
+  type        = "string"
+  default     = "200"
+}
+
+variable "https_container_success_codes" {
+  description = "The HTTP codes to use when checking for a successful response from the HTTPS container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299')."
+  type        = "string"
+  default     = "200"
+}
+
 variable "http_container_port" {
   description = "The port on which the container will receive traffic. Set to 0 to disable http."
   default     = 80
