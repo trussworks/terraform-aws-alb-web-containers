@@ -86,12 +86,6 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 # ALB
 #
 
-data "aws_acm_certificate" "main" {
-  domain      = "${local.fqdn}"
-  statuses    = ["ISSUED"]
-  most_recent = true
-}
-
 resource "aws_alb" "main" {
   name            = "${var.name}-${var.environment}"
   subnets         = ["${var.alb_subnet_ids}"]
@@ -141,7 +135,7 @@ resource "aws_alb_listener" "https" {
   load_balancer_arn = "${aws_alb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = "${data.aws_acm_certificate.main.arn}"
+  certificate_arn   = "${var.alb_acm_arn}"
 
   default_action {
     target_group_arn = "${aws_alb_target_group.https.id}"
