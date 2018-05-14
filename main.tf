@@ -188,23 +188,3 @@ resource "aws_alb_listener" "http" {
     type             = "forward"
   }
 }
-
-#
-# Route53
-#
-
-data "aws_route53_zone" "main" {
-  name = "${var.zone_name}"
-}
-
-resource "aws_route53_record" "main" {
-  zone_id = "${data.aws_route53_zone.main.zone_id}"
-  name    = "${local.fqdn}"
-  type    = "A"
-
-  alias {
-    name                   = "${aws_alb.main.dns_name}"
-    zone_id                = "${aws_alb.main.zone_id}"
-    evaluate_target_health = false
-  }
-}
