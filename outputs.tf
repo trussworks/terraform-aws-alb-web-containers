@@ -23,6 +23,11 @@ output "alb_dns_name" {
   value       = "${aws_alb.main.dns_name}"
 }
 
+output "alb_https_listener_arn" {
+  description = "The ARN associated with the HTTPS listener on the ALB."
+  value       = "${join("", aws_alb_listener.https.*.arn)}"
+}
+
 output "alb_zone_id" {
   description = "Route53 hosted zone ID associated with the ALB."
   value       = "${aws_alb.main.zone_id}"
