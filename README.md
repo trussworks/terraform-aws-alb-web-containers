@@ -1,3 +1,4 @@
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 Creates an ALB for serving a web app.
 
 Creates the following resources:
@@ -57,4 +58,6 @@ module "app_alb" {
 | alb_https_target_group_id | ID of the target group with the HTTPS listener. |
 | alb_security_group_id | Security Group ID assigned to the ALB. |
 | alb_zone_id | Route53 hosted zone ID associated with the ALB. |
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
