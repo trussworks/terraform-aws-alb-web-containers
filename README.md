@@ -5,7 +5,6 @@ Creates the following resources:
 
 * ALB with separate target groups for HTTP and HTTPS.
 * Security Groups for the ALB.
-* Route53 A record pointing to the ALB.
 
 The HTTPS listener uses an Amazon certificate.
 
@@ -17,7 +16,6 @@ module "app_alb" {
 
   name           = "app"
   environment    = "prod"
-  zone_name      = "example.com"
   logs_s3_bucket = "my-aws-logs"
 
   alb_vpc_id             = "${module.vpc.vpc_id}"
@@ -45,7 +43,6 @@ module "app_alb" {
 | https_container_success_codes | The HTTP codes to use when checking for a successful response from the HTTPS container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299'). | string | `200` | no |
 | logs_s3_bucket | S3 bucket for storing Application Load Balancer logs. | string | - | yes |
 | name | The service name. | string | - | yes |
-| zone_name | Route53 zone name. | string | - | yes |
 
 ## Outputs
 
