@@ -18,8 +18,8 @@ variable "logs_s3_bucket" {
   type        = "string"
 }
 
-variable "alb_acm_arn" {
-  description = "The ARN of the ACM certificate to be attached to the ALB."
+variable "alb_certificate_arn" {
+  description = "The ARN of the certificate to be attached to the ALB."
   type        = "string"
 }
 

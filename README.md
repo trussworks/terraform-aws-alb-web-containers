@@ -7,7 +7,7 @@ Creates the following resources:
 * Security Groups for the ALB.
 * Route53 A record pointing to the ALB.
 
-The HTTPS listener uses an Amazon certificate.
+The HTTPS listener uses a certificate stored in ACM or IAM.
 
 ## Usage
 
@@ -31,7 +31,7 @@ module "app_alb" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alb_acm_arn | The ARN of the ACM certificate to be attached to the ALB. | string | - | yes |
+| alb_certificate_arn | The ARN of the certificate to be attached to the ALB. | string | - | yes |
 | alb_subnet_ids | Subnets IDs for the ALB. | list | - | yes |
 | alb_vpc_id | VPC ID to be used by the ALB. | string | - | yes |
 | environment | Environment tag, e.g prod. | string | - | yes |
