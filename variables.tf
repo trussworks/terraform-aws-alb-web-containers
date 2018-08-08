@@ -8,11 +8,6 @@ variable "environment" {
   type        = "string"
 }
 
-variable "zone_name" {
-  description = "Route53 zone name."
-  type        = "string"
-}
-
 variable "logs_s3_bucket" {
   description = "S3 bucket for storing Application Load Balancer logs."
   type        = "string"

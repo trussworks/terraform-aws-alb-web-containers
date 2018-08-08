@@ -5,7 +5,6 @@
  *
  * * ALB with separate target groups for HTTP and HTTPS.
  * * Security Groups for the ALB.
- * * Route53 A record pointing to the ALB.
  *
  * The HTTPS listener uses an Amazon certificate.
 
@@ -17,7 +16,6 @@
  *
  *   name           = "app"
  *   environment    = "prod"
- *   zone_name      = "example.com"
  *   logs_s3_bucket = "my-aws-logs"
  *
  *   alb_vpc_id             = "${module.vpc.vpc_id}"
@@ -26,10 +24,6 @@
  * }
  * ```
  */
-
-locals {
-  fqdn = "${var.name}.${var.environment}.${var.zone_name}"
-}
 
 #
 # SG - ALB
