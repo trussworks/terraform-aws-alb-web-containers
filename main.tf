@@ -6,7 +6,7 @@
  * * ALB with separate target groups for HTTP and HTTPS.
  * * Security Groups for the ALB.
  *
- * The HTTPS listener uses an Amazon certificate.
+ * The HTTPS listener uses a certificate stored in ACM or IAM.
 
  * ## Usage
  *
@@ -129,7 +129,7 @@ resource "aws_alb_listener" "https" {
   load_balancer_arn = "${aws_alb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = "${var.alb_acm_arn}"
+  certificate_arn   = "${var.alb_certificate_arn}"
 
   default_action {
     target_group_arn = "${aws_alb_target_group.https.id}"
