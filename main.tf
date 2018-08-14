@@ -35,6 +35,7 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = "${var.alb_vpc_id}"
 
   tags = {
+    Name        = "alb-${var.name}-${var.environment}"
     Environment = "${var.environment}"
   }
 }
