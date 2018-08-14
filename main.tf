@@ -35,7 +35,9 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = "${var.alb_vpc_id}"
 
   tags = {
+    Name        = "alb-${var.name}-${var.environment}"
     Environment = "${var.environment}"
+    Automation  = "Terraform"
   }
 }
 
@@ -93,6 +95,7 @@ resource "aws_alb" "main" {
 
   tags = {
     Environment = "${var.environment}"
+    Automation  = "Terraform"
   }
 }
 
@@ -120,6 +123,7 @@ resource "aws_alb_target_group" "https" {
 
   tags = {
     Environment = "${var.environment}"
+    Automation  = "Terraform"
   }
 }
 
@@ -161,6 +165,7 @@ resource "aws_alb_target_group" "http" {
 
   tags = {
     Environment = "${var.environment}"
+    Automation  = "Terraform"
   }
 }
 
