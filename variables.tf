@@ -28,22 +28,10 @@ variable "alb_subnet_ids" {
   type        = "list"
 }
 
-variable "http_container_health_check_path" {
-  description = "The destination for the health check requests to the HTTP container."
-  type        = "string"
-  default     = "/"
-}
-
 variable "https_container_health_check_path" {
   description = "The destination for the health check requests to the HTTPS container."
   type        = "string"
   default     = "/"
-}
-
-variable "http_container_success_codes" {
-  description = "The HTTP codes to use when checking for a successful response from the HTTP container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299')."
-  type        = "string"
-  default     = "200"
 }
 
 variable "https_container_success_codes" {
@@ -52,30 +40,14 @@ variable "https_container_success_codes" {
   default     = "200"
 }
 
-variable "http_container_port" {
-  description = "The port on which the container will receive traffic. Set to 0 to disable http."
-  type        = "string"
-
-  default = 80
-}
-
-variable "http_container_protocol" {
-  description = "The protocol to use to connect with the container."
-  type        = "string"
-
-  default = "HTTP"
-}
-
 variable "https_container_port" {
-  description = "The port on which the container will receive traffic. Set to 0 to disable https."
+  description = "The port on which the container will receive traffic."
   type        = "string"
-
-  default = 443
+  default     = 443
 }
 
 variable "https_container_protocol" {
   description = "The protocol to use to connect with the container."
   type        = "string"
-
-  default = "HTTPS"
+  default     = "HTTPS"
 }

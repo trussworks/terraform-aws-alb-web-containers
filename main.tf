@@ -53,8 +53,6 @@ resource "aws_security_group_rule" "app_alb_allow_outbound" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
-  count = "${var.https_container_port == 0 ? 0 : 1}"
-
   description       = "Allow in HTTPS"
   security_group_id = "${aws_security_group.alb_sg.id}"
 
@@ -66,8 +64,6 @@ resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
-  count = "${var.http_container_port == 0 ? 0 : 1}"
-
   description       = "Allow in HTTP"
   security_group_id = "${aws_security_group.alb_sg.id}"
 
@@ -100,8 +96,6 @@ resource "aws_alb" "main" {
 }
 
 resource "aws_alb_target_group" "https" {
-  count = "${var.https_container_port == 0 ? 0 : 1}"
-
   name        = "ecs-${var.name}-${var.environment}-https"
   port        = "${var.https_container_port}"
   protocol    = "${var.https_container_protocol}"
@@ -128,8 +122,6 @@ resource "aws_alb_target_group" "https" {
 }
 
 resource "aws_alb_listener" "https" {
-  count = "${var.https_container_port == 0 ? 0 : 1}"
-
   load_balancer_arn = "${aws_alb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
@@ -141,43 +133,18 @@ resource "aws_alb_listener" "https" {
   }
 }
 
-resource "aws_alb_target_group" "http" {
-  count = "${var.http_container_port == 0 ? 0 : 1}"
-
-  name        = "ecs-${var.name}-${var.environment}-http"
-  port        = "${var.http_container_port}"
-  protocol    = "${var.http_container_protocol}"
-  vpc_id      = "${var.alb_vpc_id}"
-  target_type = "ip"
-
-  # The amount time for the ALB to wait before changing the state of a
-  # deregistering target from draining to unused. Default is 300 seconds.
-  deregistration_delay = 10
-
-  health_check {
-    path     = "${var.http_container_health_check_path}"
-    protocol = "${var.http_container_protocol}"
-    matcher  = "${var.http_container_success_codes}"
-  }
-
-  # Ensure the ALB exists before things start referencing this target group.
-  depends_on = ["aws_alb.main"]
-
-  tags = {
-    Environment = "${var.environment}"
-    Automation  = "Terraform"
-  }
-}
-
 resource "aws_alb_listener" "http" {
-  count = "${var.http_container_port == 0 ? 0 : 1}"
-
   load_balancer_arn = "${aws_alb.main.id}"
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.http.id}"
-    type             = "forward"
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }

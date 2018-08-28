@@ -5,12 +5,7 @@ output "alb_security_group_id" {
 
 output "alb_https_target_group_id" {
   description = "ID of the target group with the HTTPS listener."
-  value       = "${join("", aws_alb_target_group.https.*.id)}"
-}
-
-output "alb_http_target_group_id" {
-  description = "ID of the target group with the HTTP listener."
-  value       = "${join("", aws_alb_target_group.http.*.id)}"
+  value       = "${aws_alb_target_group.https.id}"
 }
 
 output "alb_arn" {
@@ -25,7 +20,7 @@ output "alb_dns_name" {
 
 output "alb_https_listener_arn" {
   description = "The ARN associated with the HTTPS listener on the ALB."
-  value       = "${join("", aws_alb_listener.https.*.arn)}"
+  value       = "${aws_alb_listener.https.arn}"
 }
 
 output "alb_zone_id" {
