@@ -97,8 +97,8 @@ resource "aws_alb" "main" {
 
 resource "aws_alb_target_group" "https" {
   name        = "ecs-${var.name}-${var.environment}-https"
-  port        = "${var.https_container_port}"
-  protocol    = "${var.https_container_protocol}"
+  port        = "${var.container_port}"
+  protocol    = "${var.container_protocol}"
   vpc_id      = "${var.alb_vpc_id}"
   target_type = "ip"
 
@@ -107,9 +107,9 @@ resource "aws_alb_target_group" "https" {
   deregistration_delay = 90
 
   health_check {
-    path     = "${var.https_container_health_check_path}"
-    protocol = "${var.https_container_protocol}"
-    matcher  = "${var.https_container_success_codes}"
+    path     = "${var.health_check_path}"
+    protocol = "${var.container_protocol}"
+    matcher  = "${var.health_check_success_codes}"
   }
 
   # Ensure the ALB exists before things start referencing this target group.

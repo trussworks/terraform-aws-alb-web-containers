@@ -3,7 +3,7 @@ output "alb_security_group_id" {
   value       = "${aws_security_group.alb_sg.id}"
 }
 
-output "alb_https_target_group_id" {
+output "alb_target_group_id" {
   description = "ID of the target group with the HTTPS listener."
   value       = "${aws_alb_target_group.https.id}"
 }
@@ -18,7 +18,7 @@ output "alb_dns_name" {
   value       = "${aws_alb.main.dns_name}"
 }
 
-output "alb_https_listener_arn" {
+output "alb_listener_arn" {
   description = "The ARN associated with the HTTPS listener on the ALB."
   value       = "${aws_alb_listener.https.arn}"
 }
