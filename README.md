@@ -1,10 +1,13 @@
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-Creates an ALB for serving a web app.
+Creates an ALB for serving an HTTPS web app.
 
 Creates the following resources:
 
-* ALB with separate target groups for HTTP and HTTPS.
+* ALB with HTTP (redirect) and HTTPS listeners.
+* Target group for the HTTPS listener.
 * Security Groups for the ALB.
+
+The HTTP listener redirects to HTTPS.
 
 The HTTPS listener uses a certificate stored in ACM or IAM.
 
@@ -18,9 +21,12 @@ module "app_alb" {
   environment    = "prod"
   logs_s3_bucket = "my-aws-logs"
 
-  alb_vpc_id             = "${module.vpc.vpc_id}"
-  alb_subnet_ids         = "${module.vpc.public_subnets}"
-  alb_health_check_path  = "/health"
+  alb_vpc_id          = "${module.vpc.vpc_id}"
+  alb_subnet_ids      = "${module.vpc.public_subnets}"
+  alb_certificate_arn = "${aws_acm_certificate.cert.arn}"
+
+  container_port    = "443"
+  health_check_path = "/health"
 }
 ```
 
