@@ -78,7 +78,7 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 # ALB
 #
 
-resource "aws_alb" "main" {
+resource "aws_lb" "main" {
   name            = "${var.name}-${var.environment}"
   subnets         = ["${var.alb_subnet_ids}"]
   security_groups = ["${aws_security_group.alb_sg.id}"]
@@ -95,7 +95,7 @@ resource "aws_alb" "main" {
   }
 }
 
-resource "aws_alb_target_group" "https" {
+resource "aws_lb_target_group" "https" {
   name        = "ecs-${var.name}-${var.environment}-https"
   port        = "${var.container_port}"
   protocol    = "${var.container_protocol}"
@@ -113,7 +113,7 @@ resource "aws_alb_target_group" "https" {
   }
 
   # Ensure the ALB exists before things start referencing this target group.
-  depends_on = ["aws_alb.main"]
+  depends_on = ["aws_lb.main"]
 
   tags = {
     Environment = "${var.environment}"
@@ -121,20 +121,20 @@ resource "aws_alb_target_group" "https" {
   }
 }
 
-resource "aws_alb_listener" "https" {
-  load_balancer_arn = "${aws_alb.main.id}"
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = "${aws_lb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
   certificate_arn   = "${var.alb_certificate_arn}"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.https.id}"
+    target_group_arn = "${aws_lb_target_group.https.id}"
     type             = "forward"
   }
 }
 
-resource "aws_alb_listener" "http" {
-  load_balancer_arn = "${aws_alb.main.id}"
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = "${aws_lb.main.id}"
   port              = "80"
   protocol          = "HTTP"
 
