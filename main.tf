@@ -131,6 +131,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = "${aws_lb.main.id}"
   port              = "443"
   protocol          = "HTTPS"
+  ssl_policy        = "${var.alb_ssl_policy}"
   certificate_arn   = "${var.alb_certificate_arn}"
 
   default_action {

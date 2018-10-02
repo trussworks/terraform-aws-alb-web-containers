@@ -28,6 +28,12 @@ variable "alb_subnet_ids" {
   type        = "list"
 }
 
+variable "alb_ssl_policy" {
+  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>."
+  type        = "string"
+  default     = "ELBSecurityPolicy-2016-08"
+}
+
 variable "health_check_path" {
   description = "The destination for the health check requests to the container."
   type        = "string"
