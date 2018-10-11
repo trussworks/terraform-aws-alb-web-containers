@@ -21,9 +21,9 @@ module "app_alb" {
   environment    = "prod"
   logs_s3_bucket = "my-aws-logs"
 
-  alb_vpc_id          = "${module.vpc.vpc_id}"
-  alb_subnet_ids      = "${module.vpc.public_subnets}"
-  alb_certificate_arn = "${aws_acm_certificate.cert.arn}"
+  alb_vpc_id                  = "${module.vpc.vpc_id}"
+  alb_subnet_ids              = "${module.vpc.public_subnets}"
+  alb_default_certificate_arn = "${aws_acm_certificate.cert.arn}"
 
   container_port    = "443"
   health_check_path = "/health"
@@ -35,7 +35,8 @@ module "app_alb" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alb_certificate_arn | The ARN of the certificate to be attached to the ALB. | string | - | yes |
+| alb_certificate_arns | The ARNs of the certificates to be attached to the ALB. | list | `<list>` | no |
+| alb_default_certificate_arn | The ARN of the default certificate to be attached to the ALB. | string | - | yes |
 | alb_ssl_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `ELBSecurityPolicy-2016-08` | no |
 | alb_subnet_ids | Subnets IDs for the ALB. | list | - | yes |
 | alb_vpc_id | VPC ID to be used by the ALB. | string | - | yes |

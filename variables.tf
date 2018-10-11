@@ -13,9 +13,15 @@ variable "logs_s3_bucket" {
   type        = "string"
 }
 
-variable "alb_certificate_arn" {
-  description = "The ARN of the certificate to be attached to the ALB."
+variable "alb_default_certificate_arn" {
+  description = "The ARN of the default certificate to be attached to the ALB."
   type        = "string"
+}
+
+variable "alb_certificate_arns" {
+  description = "The ARNs of the certificates to be attached to the ALB."
+  type        = "list"
+  default     = []
 }
 
 variable "alb_vpc_id" {
