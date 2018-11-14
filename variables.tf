@@ -40,10 +40,34 @@ variable "alb_ssl_policy" {
   default     = "ELBSecurityPolicy-2016-08"
 }
 
+variable "deregistration_delay" {
+  description = "The amount time for the LB to wait before changing the state of a deregistering target from draining to unused. Default is 90s."
+  type        = "string"
+  default     = 90
+}
+
+variable "health_check_interval" {
+  description = "The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds."
+  type        = "string"
+  default     = 30
+}
+
 variable "health_check_path" {
   description = "The destination for the health check requests to the container."
   type        = "string"
   default     = "/"
+}
+
+variable "healthy_threshold" {
+  description = "The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3."
+  type        = "string"
+  default     = 3
+}
+
+variable "unhealthy_threshold" {
+  description = "The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3."
+  type        = "string"
+  default     = 3
 }
 
 variable "health_check_success_codes" {

@@ -108,14 +108,17 @@ resource "aws_lb_target_group" "https" {
   vpc_id      = "${var.alb_vpc_id}"
   target_type = "ip"
 
-  # The amount time for the ALB to wait before changing the state of a
-  # deregistering target from draining to unused. Default is 300 seconds.
-  deregistration_delay = 90
+  # The amount time for the LB to wait before changing the state of a
+  # deregistering target from draining to unused. AWS default is 300 seconds.
+  deregistration_delay = "${var.deregistration_delay}"
 
   health_check {
-    path     = "${var.health_check_path}"
-    protocol = "${var.container_protocol}"
-    matcher  = "${var.health_check_success_codes}"
+    interval            = "${var.health_check_interval}"
+    path                = "${var.health_check_path}"
+    protocol            = "${var.container_protocol}"
+    healthy_threshold   = "${var.healthy_threshold}"
+    unhealthy_threshold = "${var.unhealthy_threshold}"
+    matcher             = "${var.health_check_success_codes}"
   }
 
   # Ensure the ALB exists before things start referencing this target group.
