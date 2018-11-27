@@ -36,8 +36,9 @@ module "app_alb" {
 |------|-------------|:----:|:-----:|:-----:|
 | alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list | `<list>` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | - | yes |
+| alb\_internal | If true, the ALB will be internal. | string | `false` | no |
 | alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `ELBSecurityPolicy-2016-08` | no |
-| alb\_subnet\_ids | Subnets IDs for the ALB. | list | - | yes |
+| alb\_subnet\_ids | Subnet IDs for the ALB. | list | - | yes |
 | alb\_vpc\_id | VPC ID to be used by the ALB. | string | - | yes |
 | container\_port | The port on which the container will receive traffic. | string | `443` | no |
 | container\_protocol | The protocol to use to connect with the container. | string | `HTTPS` | no |
