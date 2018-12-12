@@ -93,3 +93,15 @@ variable "container_protocol" {
   type        = "string"
   default     = "HTTPS"
 }
+
+variable "allow_public_http" {
+  description = "Allow inbound access from the Internet to port 80"
+  type        = "string"
+  default     = true
+}
+
+variable "allow_public_https" {
+  description = "Allow inbound access from the Internet to port 443"
+  type        = "string"
+  default     = true
+}
