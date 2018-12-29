@@ -118,6 +118,7 @@ resource "aws_lb_target_group" "https" {
   deregistration_delay = "${var.deregistration_delay}"
 
   health_check {
+    timeout             = "${var.health_check_timeout}"
     interval            = "${var.health_check_interval}"
     path                = "${var.health_check_path}"
     protocol            = "${var.container_protocol}"

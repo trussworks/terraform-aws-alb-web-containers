@@ -58,6 +58,12 @@ variable "health_check_interval" {
   default     = 30
 }
 
+variable "health_check_timeout" {
+  description = "The health check timeout. Minimum value 2 seconds, Maximum value 120 seconds. Default 5 seconds."
+  type        = "string"
+  default     = 5
+}
+
 variable "health_check_path" {
   description = "The destination for the health check requests to the container."
   type        = "string"
