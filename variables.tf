@@ -59,7 +59,7 @@ variable "health_check_interval" {
 }
 
 variable "health_check_timeout" {
-  description = "The health check timeout. Minimum value 2 seconds, Maximum value 120 seconds. Default 5 seconds."
+  description = "The health check timeout. Minimum value 2 seconds, Maximum value 60 seconds. Default 5 seconds."
   type        = "string"
   default     = 5
 }
