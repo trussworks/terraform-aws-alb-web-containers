@@ -49,6 +49,7 @@ module "app_alb" {
 | health\_check\_interval | The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds. | string | `30` | no |
 | health\_check\_path | The destination for the health check requests to the container. | string | `/` | no |
 | health\_check\_success\_codes | The HTTP codes to use when checking for a successful response from the container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299'). | string | `200` | no |
+| health\_check\_timeout | The health check timeout. Minimum value 2 seconds, Maximum value 60 seconds. Default 5 seconds. | string | `5` | no |
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | string | `3` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | string | - | yes |
 | name | The service name. | string | - | yes |
