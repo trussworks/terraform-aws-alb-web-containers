@@ -15,7 +15,7 @@ The HTTPS listener uses a certificate stored in ACM or IAM.
 
 ```hcl
 module "app_alb" {
-  source = "../../modules/aws-alb-web-service"
+  source = "trussworks/alb-web-containers/aws"
 
   name           = "app"
   environment    = "prod"
