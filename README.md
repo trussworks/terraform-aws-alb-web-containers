@@ -36,9 +36,9 @@ module "app_alb" {
 |------|-------------|:----:|:-----:|:-----:|
 | alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list | `[]` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | n/a | yes |
-| alb\_internal | If true, the ALB will be internal. | string | `"false"` | no |
+| alb\_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | string | `"false"` | no |
 | alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
-| alb\_subnet\_ids | Subnet IDs for the ALB. | list | n/a | yes |
+| alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list | n/a | yes |
 | alb\_vpc\_id | VPC ID to be used by the ALB. | string | n/a | yes |
 | allow\_public\_http | Allow inbound access from the Internet to port 80 | string | `"true"` | no |
 | allow\_public\_https | Allow inbound access from the Internet to port 443 | string | `"true"` | no |

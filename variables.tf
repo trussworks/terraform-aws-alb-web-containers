@@ -30,13 +30,13 @@ variable "alb_vpc_id" {
 }
 
 variable "alb_internal" {
-  description = "If true, the ALB will be internal."
+  description = "If true, the ALB will be internal. Default's to false, the ALB will be public."
   type        = "string"
   default     = false
 }
 
 variable "alb_subnet_ids" {
-  description = "Subnet IDs for the ALB."
+  description = "Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB."
   type        = "list"
 }
 
