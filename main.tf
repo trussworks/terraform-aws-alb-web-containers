@@ -91,8 +91,8 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 resource "aws_lb" "main" {
   name            = "${var.name}-${var.environment}"
   internal        = "${var.alb_internal}"
-  subnets         = ["${var.alb_subnet_ids}"]
-  security_groups = ["${aws_security_group.alb_sg.id}"]
+  subnets         = "${var.alb_subnet_ids}"
+  security_groups = "${aws_security_group.alb_sg.id}"
 
   access_logs {
     enabled = true
