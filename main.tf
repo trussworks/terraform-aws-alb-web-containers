@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "app_alb_allow_outbound" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
-  count = "${var.allow_public_https}"
+  count = "${var.allow_public_https ? 1 : 0}"
 
   description       = "Allow in HTTPS"
   security_group_id = "${aws_security_group.alb_sg.id}"
@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
-  count = "${var.allow_public_http}"
+  count = "${var.allow_public_http ? 1 : 0}"
 
   description       = "Allow in HTTP"
   security_group_id = "${aws_security_group.alb_sg.id}"
