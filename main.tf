@@ -92,7 +92,7 @@ resource "aws_lb" "main" {
   name            = "${var.name}-${var.environment}"
   internal        = "${var.alb_internal}"
   subnets         = "${var.alb_subnet_ids}"
-  security_groups = "${aws_security_group.alb_sg.id}"
+  security_groups = ["${aws_security_group.alb_sg.id}"]
 
   access_logs {
     enabled = true
