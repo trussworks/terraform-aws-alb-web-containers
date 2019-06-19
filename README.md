@@ -1,44 +1,13 @@
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-Creates an ALB for serving an HTTPS web app.
-
-Creates the following resources:
-
-* ALB with HTTP (redirect) and HTTPS listeners.
-* Target group for the HTTPS listener.
-* Security Groups for the ALB.
-
-The HTTP listener redirects to HTTPS.
-
-The HTTPS listener uses a certificate stored in ACM or IAM.
-
-## Usage
-
-```hcl
-module "app_alb" {
-  source = "trussworks/alb-web-containers/aws"
-
-  name           = "app"
-  environment    = "prod"
-  logs_s3_bucket = "my-aws-logs"
-
-  alb_vpc_id                  = "${module.vpc.vpc_id}"
-  alb_subnet_ids              = "${module.vpc.public_subnets}"
-  alb_default_certificate_arn = "${aws_acm_certificate.cert.arn}"
-
-  container_port    = "443"
-  health_check_path = "/health"
-}
-```
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list | `[]` | no |
+| alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list(string) | `[]` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | n/a | yes |
 | alb\_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | string | `"false"` | no |
 | alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
-| alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list | n/a | yes |
+| alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list(string) | n/a | yes |
 | alb\_vpc\_id | VPC ID to be used by the ALB. | string | n/a | yes |
 | allow\_public\_http | Allow inbound access from the Internet to port 80 | string | `"true"` | no |
 | allow\_public\_https | Allow inbound access from the Internet to port 443 | string | `"true"` | no |
