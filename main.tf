@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "app_alb_allow_outbound" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
-  count = "${var.allow_public_https}"
+  count = "${var.allow_public_https ? 1 : 0}"
 
   description       = "Allow in HTTPS"
   security_group_id = "${aws_security_group.alb_sg.id}"
@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
-  count = "${var.allow_public_http}"
+  count = "${var.allow_public_http ? 1 : 0}"
 
   description       = "Allow in HTTP"
   security_group_id = "${aws_security_group.alb_sg.id}"
@@ -91,7 +91,7 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 resource "aws_lb" "main" {
   name            = "${var.name}-${var.environment}"
   internal        = "${var.alb_internal}"
-  subnets         = ["${var.alb_subnet_ids}"]
+  subnets         = var.alb_subnet_ids
   security_groups = ["${aws_security_group.alb_sg.id}"]
 
   access_logs {
@@ -107,7 +107,9 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "https" {
-  name        = "ecs-${var.name}-${var.environment}-https"
+  # Name must be less than or equal to 32 characters, or AWS API returns error.
+  # Error: "name" cannot be longer than 32 characters
+  name        = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
   port        = "${var.container_port}"
   protocol    = "${var.container_protocol}"
   vpc_id      = "${var.alb_vpc_id}"

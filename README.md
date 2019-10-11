@@ -1,4 +1,3 @@
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 Creates an ALB for serving an HTTPS web app.
 
 Creates the following resources:
@@ -10,6 +9,12 @@ Creates the following resources:
 The HTTP listener redirects to HTTPS.
 
 The HTTPS listener uses a certificate stored in ACM or IAM.
+
+## Terraform Versions
+
+Terraform 0.12. Pin module version to ~> 3.0.0. Submit pull-requests to master branch.
+
+Terraform 0.11. Pin module version to ~> 2.6.1. Submit pull-requests to terraform011 branch.
 
 ## Usage
 
@@ -30,6 +35,7 @@ module "app_alb" {
 }
 ```
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -53,6 +59,7 @@ module "app_alb" {
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | string | `"3"` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | string | n/a | yes |
 | name | The service name. | string | n/a | yes |
+| target\_group\_name | The name of the ALB's target group.  Overrides default template. | string | `""` | no |
 | unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3. | string | `"3"` | no |
 
 ## Outputs
@@ -69,4 +76,3 @@ module "app_alb" {
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-
