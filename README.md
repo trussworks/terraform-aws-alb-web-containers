@@ -59,7 +59,7 @@ module "app_alb" {
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | string | `"3"` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | string | n/a | yes |
 | name | The service name. | string | n/a | yes |
-| target\_group\_name | The name of the ALB's target group.  Overrides default template. | string | `""` | no |
+| target\_group\_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]. | string | `""` | no |
 | unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3. | string | `"3"` | no |
 
 ## Outputs
