@@ -111,3 +111,9 @@ variable "allow_public_https" {
   type        = "string"
   default     = true
 }
+
+variable "target_group_name" {
+  description = "Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]."
+  type        = "string"
+  default     = ""
+}
