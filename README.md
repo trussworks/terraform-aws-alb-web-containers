@@ -12,7 +12,7 @@ The HTTPS listener uses a certificate stored in ACM or IAM.
 
 ## Terraform Versions
 
-Terraform 0.12. Pin module version to ~> 3.0.0. Submit pull-requests to master branch.
+Terraform 0.12. Pin module version to ~> 3.X. Submit pull-requests to master branch.
 
 Terraform 0.11. Pin module version to ~> 2.6.1. Submit pull-requests to terraform011 branch.
 
