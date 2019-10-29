@@ -12,7 +12,7 @@ The HTTPS listener uses a certificate stored in ACM or IAM.
 
 ## Terraform Versions
 
-Terraform 0.12. Pin module version to ~> 3.0.0. Submit pull-requests to master branch.
+Terraform 0.12. Pin module version to ~> 3.X. Submit pull-requests to master branch.
 
 Terraform 0.11. Pin module version to ~> 2.6.1. Submit pull-requests to terraform011 branch.
 
@@ -40,11 +40,11 @@ module "app_alb" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list | `[]` | no |
+| alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list(string) | `[]` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | n/a | yes |
 | alb\_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | string | `"false"` | no |
 | alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
-| alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list | n/a | yes |
+| alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list(string) | n/a | yes |
 | alb\_vpc\_id | VPC ID to be used by the ALB. | string | n/a | yes |
 | allow\_public\_http | Allow inbound access from the Internet to port 80 | string | `"true"` | no |
 | allow\_public\_https | Allow inbound access from the Internet to port 443 | string | `"true"` | no |
