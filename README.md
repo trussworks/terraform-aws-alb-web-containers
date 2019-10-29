@@ -1,3 +1,40 @@
+Creates an ALB for serving an HTTPS web app.
+
+Creates the following resources:
+
+* ALB with HTTP (redirect) and HTTPS listeners.
+* Target group for the HTTPS listener.
+* Security Groups for the ALB.
+
+The HTTP listener redirects to HTTPS.
+
+The HTTPS listener uses a certificate stored in ACM or IAM.
+
+## Terraform Versions
+
+Terraform 0.12. Pin module version to ~> 3.0.0. Submit pull-requests to master branch.
+
+Terraform 0.11. Pin module version to ~> 2.6.1. Submit pull-requests to terraform011 branch.
+
+## Usage
+
+```hcl
+module "app_alb" {
+  source = "trussworks/alb-web-containers/aws"
+
+  name           = "app"
+  environment    = "prod"
+  logs_s3_bucket = "my-aws-logs"
+
+  alb_vpc_id                  = "${module.vpc.vpc_id}"
+  alb_subnet_ids              = "${module.vpc.public_subnets}"
+  alb_default_certificate_arn = "${aws_acm_certificate.cert.arn}"
+
+  container_port    = "443"
+  health_check_path = "/health"
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
@@ -22,6 +59,7 @@
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | string | `"3"` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | string | n/a | yes |
 | name | The service name. | string | n/a | yes |
+| target\_group\_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]. | string | `""` | no |
 | unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3. | string | `"3"` | no |
 
 ## Outputs
@@ -38,4 +76,3 @@
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-

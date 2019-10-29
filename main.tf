@@ -107,7 +107,9 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "https" {
-  name        = "ecs-${var.name}-${var.environment}-https"
+  # Name must be less than or equal to 32 characters, or AWS API returns error.
+  # Error: "name" cannot be longer than 32 characters
+  name        = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
   port        = var.container_port
   protocol    = var.container_protocol
   vpc_id      = var.alb_vpc_id
