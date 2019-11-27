@@ -42,6 +42,7 @@ module "app_alb" {
 |------|-------------|:----:|:-----:|:-----:|
 | alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | list(string) | `[]` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | n/a | yes |
+| alb\_idle\_timeout | The time in seconds that the connection is allowed to be idle. | number | `"60"` | no |
 | alb\_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | string | `"false"` | no |
 | alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
 | alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list(string) | n/a | yes |

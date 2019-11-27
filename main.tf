@@ -93,6 +93,7 @@ resource "aws_lb" "main" {
   internal        = var.alb_internal
   subnets         = var.alb_subnet_ids
   security_groups = [aws_security_group.alb_sg.id]
+  idle_timeout    = var.alb_idle_timeout
 
   access_logs {
     enabled = true
