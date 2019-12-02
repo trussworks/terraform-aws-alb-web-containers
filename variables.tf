@@ -46,6 +46,12 @@ variable "alb_ssl_policy" {
   default     = "ELBSecurityPolicy-2016-08"
 }
 
+variable "alb_idle_timeout" {
+  description = "The time in seconds that the connection is allowed to be idle."
+  type        = number
+  default     = 60
+}
+
 variable "deregistration_delay" {
   description = "The amount time for the LB to wait before changing the state of a deregistering target from draining to unused. Default is 90s."
   type        = string
