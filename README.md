@@ -77,3 +77,27 @@ module "app_alb" {
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Developer Setup
+
+Install dependencies (macOS)
+
+```shell
+brew install pre-commit go terraform terraform-docs
+```
+
+### Testing
+
+[Terratest](https://github.com/gruntwork-io/terratest) is being used for
+automated testing with this module. Tests in the `test` folder can be run
+locally by running the following command:
+
+```shell
+make test
+```
+
+Or with aws-vault:
+
+```shell
+AWS_VAULT_KEYCHAIN_NAME=<NAME> aws-vault exec <PROFILE> -- make test
+```
