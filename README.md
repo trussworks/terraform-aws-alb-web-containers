@@ -84,6 +84,7 @@ Install dependencies (macOS)
 
 ```shell
 brew install pre-commit go terraform terraform-docs
+pre-commit install --install-hooks
 ```
 
 ### Testing
