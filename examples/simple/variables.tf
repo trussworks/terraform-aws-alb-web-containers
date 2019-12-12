@@ -6,7 +6,7 @@ variable "region" {
   type = string
 }
 
-variables "test_name" {
+variable "test_name" {
   type = string
 }
 

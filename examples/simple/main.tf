@@ -1,7 +1,7 @@
 locals {
-  environment = "test" 
-  zone_name = "infra-test.truss.coffee"
-  container_port = "443"
+  environment       = "test"
+  zone_name         = "infra-test.truss.coffee"
+  container_port    = "443"
   health_check_path = "/health"
 }
 
@@ -14,7 +14,7 @@ module "alb" {
 
   alb_vpc_id                  = module.vpc.vpc_id
   alb_subnet_ids              = module.vpc.public_subnets
-  alb_default_certificate_arn = module.acm-cert.arn
+  alb_default_certificate_arn = module.acm-cert.acm_arn
 
   container_port    = local.container_port
   health_check_path = local.health_check_path
@@ -30,10 +30,10 @@ module "logs" {
 module "acm-cert" {
   source  = "trussworks/acm-cert/aws"
   version = "~> 2"
-  
+
   domain_name = "${var.test_name}.${local.zone_name}"
   environment = local.environment
-  zone_name = local.zone_name
+  zone_name   = local.zone_name
 }
 
 module "vpc" {
@@ -49,6 +49,7 @@ module "vpc" {
 #
 # KMS
 #
+data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
   statement {
@@ -107,19 +108,19 @@ module "ecs-service" {
   source  = "trussworks/ecs-service/aws"
   version = "~> 2"
 
-  name = var.test_name
+  name        = var.test_name
   environment = local.environment
 
-  ecs_cluster = aws_ecs_cluster.main.id
-  ecs_subnet_ids = module.vpc.public_subnets
-  ecs_vpc_id = module.vpc.vpc_id
+  ecs_cluster     = aws_ecs_cluster.main
+  ecs_subnet_ids  = module.vpc.public_subnets
+  ecs_vpc_id      = module.vpc.vpc_id
   ecs_use_fargate = true
-  container_port = local.container_port
+  container_port  = local.container_port
 
   kms_key_id = aws_kms_key.main.arn
 
   associate_alb      = true
   alb_security_group = module.alb.alb_security_group_id
-  lb_target_group = module.alb.alb_target_group_id
+  lb_target_group    = module.alb.alb_target_group_id
 }
 
