@@ -36,6 +36,18 @@ module "acm-cert" {
   zone_name   = local.zone_name
 }
 
+data "aws_route53_zone" "infra_truss_coffee" {
+  name = local.zone_name
+}
+
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.infra_truss_coffee.zone_id
+  name    = var.test_name
+  type    = "CNAME"
+  ttl     = "300"
+  records = [module.alb.alb_dns_name]
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2"
@@ -75,7 +87,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
 
     principals {
       type        = "Service"
-      identifiers = ["logs.us-west-2.amazonaws.com"]
+      identifiers = ["logs.us-east-2.amazonaws.com"]
     }
 
     actions = [
@@ -116,6 +128,7 @@ module "ecs-service" {
   ecs_vpc_id      = module.vpc.vpc_id
   ecs_use_fargate = true
   container_port  = local.container_port
+  container_image = "golang:alpine"
 
   kms_key_id = aws_kms_key.main.arn
 
