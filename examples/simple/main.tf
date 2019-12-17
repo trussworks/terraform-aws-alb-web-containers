@@ -1,8 +1,9 @@
 locals {
-  environment       = "test"
-  zone_name         = "infra-test.truss.coffee"
-  container_port    = "443"
-  health_check_path = "/health"
+  environment        = "test"
+  zone_name          = "infra-test.truss.coffee"
+  container_protocol = "HTTP"
+  container_port     = "80"
+  health_check_path  = "/"
 }
 
 module "alb" {
@@ -16,8 +17,9 @@ module "alb" {
   alb_subnet_ids              = module.vpc.public_subnets
   alb_default_certificate_arn = module.acm-cert.acm_arn
 
-  container_port    = local.container_port
-  health_check_path = local.health_check_path
+  container_port     = local.container_port
+  container_protocol = local.container_protocol
+  health_check_path  = local.health_check_path
 }
 
 module "logs" {
@@ -52,10 +54,11 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 2"
 
-  name           = var.test_name
-  cidr           = "10.0.0.0/16"
-  azs            = var.vpc_azs
-  public_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  name            = var.test_name
+  cidr            = "10.0.0.0/16"
+  azs             = var.vpc_azs
+  private_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  public_subnets  = ["10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
 
   enable_nat_gateway = true
   single_nat_gateway = true
@@ -90,7 +93,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
 
     principals {
       type        = "Service"
-      identifiers = ["logs.us-east-2.amazonaws.com"]
+      identifiers = ["logs.${var.region}.amazonaws.com"]
     }
 
     actions = [
@@ -127,7 +130,7 @@ module "ecs-service" {
   environment = local.environment
 
   ecs_cluster     = aws_ecs_cluster.main
-  ecs_subnet_ids  = module.vpc.public_subnets
+  ecs_subnet_ids  = module.vpc.private_subnets
   ecs_vpc_id      = module.vpc.vpc_id
   ecs_use_fargate = true
   container_port  = local.container_port
