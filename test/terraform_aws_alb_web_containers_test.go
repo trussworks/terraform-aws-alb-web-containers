@@ -80,12 +80,12 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// Run `terraform output` to get the value of an output variable
-	albDomain := terraform.Output(t, terraformOptions, "alb_url")
-	albURL := fmt.Sprintf("https://%s/", albDomain)
+	dnsEndpoint := terraform.Output(t, terraformOptions, "dns_endpoint")
+	testURL := fmt.Sprintf("https://%s/", dnsEndpoint)
 	expectedText := "Hello, world!"
 	tlsConfig := tls.Config{}
 	maxRetries := 10
-	timeBetweenRetries := 30 * time.Second
+	timeBetweenRetries := 10 * time.Second
 
-	http_helper.HttpGetWithRetry(t, albURL, &tlsConfig, 200, expectedText, maxRetries, timeBetweenRetries)
+	http_helper.HttpGetWithRetry(t, testURL, &tlsConfig, 200, expectedText, maxRetries, timeBetweenRetries)
 }
