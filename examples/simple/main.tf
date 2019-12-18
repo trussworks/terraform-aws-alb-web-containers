@@ -67,6 +67,7 @@ module "vpc" {
 #
 # KMS
 #
+
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
