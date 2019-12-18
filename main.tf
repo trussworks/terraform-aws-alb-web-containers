@@ -1,36 +1,3 @@
-/**
- * Creates an ALB for serving an HTTPS web app.
- *
- * Creates the following resources:
- *
- * * ALB with HTTP (redirect) and HTTPS listeners.
- * * Target group for the HTTPS listener.
- * * Security Groups for the ALB.
- *
- * The HTTP listener redirects to HTTPS.
- *
- * The HTTPS listener uses a certificate stored in ACM or IAM.
- *
- * ## Usage
- *
- * ```hcl
- * module "app_alb" {
- *   source = "trussworks/alb-web-containers/aws"
- *
- *   name           = "app"
- *   environment    = "prod"
- *   logs_s3_bucket = "my-aws-logs"
- *
- *   alb_vpc_id                  = "${module.vpc.vpc_id}"
- *   alb_subnet_ids              = "${module.vpc.public_subnets}"
- *   alb_default_certificate_arn = "${aws_acm_certificate.cert.arn}"
- *
- *   container_port    = "443"
- *   health_check_path = "/health"
- * }
- * ```
- */
-
 #
 # SG - ALB
 #

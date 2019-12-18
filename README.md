@@ -44,7 +44,7 @@ module "app_alb" {
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | string | n/a | yes |
 | alb\_idle\_timeout | The time in seconds that the connection is allowed to be idle. | number | `"60"` | no |
 | alb\_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | string | `"false"` | no |
-| alb\_ssl\_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
+| alb\_ssl\_policy | The SSL policy \(aka security policy\) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>. | string | `"ELBSecurityPolicy-2016-08"` | no |
 | alb\_subnet\_ids | Subnet IDs for the ALB. Use public subnets for a public ALB and private subnets for an internal ALB. | list(string) | n/a | yes |
 | alb\_vpc\_id | VPC ID to be used by the ALB. | string | n/a | yes |
 | allow\_public\_http | Allow inbound access from the Internet to port 80 | string | `"true"` | no |
@@ -55,13 +55,13 @@ module "app_alb" {
 | environment | Environment tag, e.g prod. | string | n/a | yes |
 | health\_check\_interval | The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds. | string | `"30"` | no |
 | health\_check\_path | The destination for the health check requests to the container. | string | `"/"` | no |
-| health\_check\_success\_codes | The HTTP codes to use when checking for a successful response from the container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299'). | string | `"200"` | no |
+| health\_check\_success\_codes | The HTTP codes to use when checking for a successful response from the container. You can specify multiple values \(for example, '200,202'\) or a range of values \(for example, '200-299'\). | string | `"200"` | no |
 | health\_check\_timeout | The health check timeout. Minimum value 2 seconds, Maximum value 60 seconds. Default 5 seconds. | string | `"5"` | no |
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | string | `"3"` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | string | n/a | yes |
 | name | The service name. | string | n/a | yes |
-| target\_group\_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]. | string | `""` | no |
-| unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3. | string | `"3"` | no |
+| target\_group\_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-\[name\]-\[environment\]-\[protocol\]. | string | `""` | no |
+| unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy\_threshold. Defaults to 3. | string | `"3"` | no |
 
 ## Outputs
 
@@ -77,3 +77,28 @@ module "app_alb" {
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## Developer Setup
+
+Install dependencies (macOS)
+
+```shell
+brew install pre-commit go terraform terraform-docs
+pre-commit install --install-hooks
+```
+
+### Testing
+
+[Terratest](https://github.com/gruntwork-io/terratest) is being used for
+automated testing with this module. Tests in the `test` folder can be run
+locally by running the following command:
+
+```shell
+make test
+```
+
+Or with aws-vault:
+
+```shell
+AWS_VAULT_KEYCHAIN_NAME=<NAME> aws-vault exec <PROFILE> -- make test
+```
