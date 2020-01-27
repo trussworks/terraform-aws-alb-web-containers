@@ -43,7 +43,6 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 	}
 
 	defer terraform.Destroy(t, terraformOptions)
-	defer aws.EmptyS3Bucket(t, awsRegion, loggingBucket)
 	terraform.InitAndApply(t, terraformOptions)
 
 	// Run `terraform output` to get the value of an output variable
