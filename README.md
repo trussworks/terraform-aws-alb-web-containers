@@ -71,8 +71,12 @@ module "app_alb" {
 | alb\_arn\_suffix | The ARN Suffix of the ALB for use with CloudWatch Metrics. |
 | alb\_dns\_name | DNS name of the ALB. |
 | alb\_id | The ID of the ALB. |
+| alb\_listener | The ALB HTTPS listener object |
 | alb\_listener\_arn | The ARN associated with the HTTPS listener on the ALB. |
+| alb\_security\_group | Security Group object assigned to the ALB. |
 | alb\_security\_group\_id | Security Group ID assigned to the ALB. |
+| alb\_target\_group | Object of the first target group with HTTPS listener |
+| alb\_target\_group\_2 | Object of the second target group with HTTPS listener |
 | alb\_target\_group\_id | ID of the target group with the HTTPS listener. |
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
 
