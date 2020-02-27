@@ -106,6 +106,39 @@ resource "aws_lb_target_group" "https" {
   }
 }
 
+# secondary target used with code deploy
+resource "aws_lb_target_group" "https2" {
+  # Name must be less than or equal to 32 characters, or AWS API returns error.
+  # Error: "name" cannot be longer than 32 characters
+  name        = coalesce(var.target_group_name, format("ecs-%s-%s-https2", var.name, var.environment))
+  port        = var.container_port
+  protocol    = var.container_protocol
+  vpc_id      = var.alb_vpc_id
+  target_type = "ip"
+
+  # The amount time for the LB to wait before changing the state of a
+  # deregistering target from draining to unused. AWS default is 300 seconds.
+  deregistration_delay = var.deregistration_delay
+
+  health_check {
+    timeout             = var.health_check_timeout
+    interval            = var.health_check_interval
+    path                = var.health_check_path
+    protocol            = var.container_protocol
+    healthy_threshold   = var.healthy_threshold
+    unhealthy_threshold = var.unhealthy_threshold
+    matcher             = var.health_check_success_codes
+  }
+
+  # Ensure the ALB exists before things start referencing this target group.
+  depends_on = [aws_lb.main]
+
+  tags = {
+    Environment = var.environment
+    Automation  = "Terraform"
+  }
+}
+
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
   port              = "80"
