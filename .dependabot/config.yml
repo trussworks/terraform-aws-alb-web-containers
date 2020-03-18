@@ -14,4 +14,3 @@ update_configs:
       - match:
           dependency_type: "all"
           update_type: "all"
-          
