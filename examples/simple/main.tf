@@ -2,7 +2,7 @@ locals {
   environment        = "test"
   zone_name          = "infra-test.truss.coffee"
   container_protocol = "HTTP"
-  container_port     = "80"
+  container_port     = "8080"
   health_check_path  = "/"
 }
 
@@ -145,7 +145,7 @@ module "ecs-service" {
     {
       container_port              = local.container_port
       container_health_check_port = local.container_port
-      lb_target_group_arn         = module.alb.alb_arn
+      lb_target_group_arn         = module.alb.alb_target_group_id
     }
   ]
 
