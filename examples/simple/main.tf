@@ -24,10 +24,13 @@ module "alb" {
 
 module "logs" {
   source         = "trussworks/logs/aws"
-  version        = "~> 5"
+  version        = "~> 8"
   s3_bucket_name = var.logs_bucket
   region         = var.region
   force_destroy  = true
+  alb_logs_prefixes = [
+    "alb/${var.test_name}-${local.environment}"
+  ]
 }
 
 module "acm-cert" {

@@ -67,7 +67,7 @@ resource "aws_lb" "main" {
   access_logs {
     enabled = true
     bucket  = var.logs_s3_bucket
-    prefix  = "alb/AWSLogs/${data.aws_caller_identity.current.account_id}/${var.name}-${var.environment}"
+    prefix  = "alb/${var.name}-${var.environment}"
   }
 
   tags = {
