@@ -2,7 +2,7 @@ locals {
   environment        = "test"
   zone_name          = "infra-test.truss.coffee"
   container_protocol = "HTTP"
-  container_port     = "80"
+  container_port     = "8080"
   health_check_path  = "/"
 }
 
@@ -24,10 +24,13 @@ module "alb" {
 
 module "logs" {
   source         = "trussworks/logs/aws"
-  version        = "~> 5"
+  version        = "~> 8"
   s3_bucket_name = var.logs_bucket
   region         = var.region
   force_destroy  = true
+  alb_logs_prefixes = [
+    "alb/${var.test_name}-${local.environment}"
+  ]
 }
 
 module "acm-cert" {
@@ -126,22 +129,28 @@ resource "aws_ecs_cluster" "main" {
 
 module "ecs-service" {
   source  = "trussworks/ecs-service/aws"
-  version = "~> 2"
+  version = "~> 3"
 
   name        = var.test_name
   environment = local.environment
 
   ecs_cluster     = aws_ecs_cluster.main
-  ecs_subnet_ids  = module.vpc.private_subnets
   ecs_vpc_id      = module.vpc.vpc_id
+  ecs_subnet_ids  = module.vpc.private_subnets
+  kms_key_id      = aws_kms_key.main.arn
   ecs_use_fargate = true
-  container_port  = local.container_port
-  container_image = "golang:alpine"
 
-  kms_key_id = aws_kms_key.main.arn
+  container_image = "golang:alpine"
 
   associate_alb      = true
   alb_security_group = module.alb.alb_security_group_id
-  lb_target_group    = module.alb.alb_target_group_id
+  lb_target_groups = [
+    {
+      container_port              = local.container_port
+      container_health_check_port = local.container_port
+      lb_target_group_arn         = module.alb.alb_target_group_id
+    }
+  ]
+
 }
 

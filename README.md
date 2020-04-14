@@ -36,6 +36,12 @@ module "app_alb" {
 ```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12 |
+
 ## Providers
 
 | Name | Version |
@@ -45,7 +51,7 @@ module "app_alb" {
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | alb\_certificate\_arns | The ARNs of the certificates to be attached to the ALB. | `list(string)` | `[]` | no |
 | alb\_default\_certificate\_arn | The ARN of the default certificate to be attached to the ALB. | `string` | n/a | yes |
 | alb\_idle\_timeout | The time in seconds that the connection is allowed to be idle. | `number` | `60` | no |
