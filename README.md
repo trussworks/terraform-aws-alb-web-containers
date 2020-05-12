@@ -3,7 +3,7 @@ Creates an ALB for serving an HTTPS web app.
 Creates the following resources:
 
 * ALB with HTTP (redirect) and HTTPS listeners.
-* Target group for the HTTPS listener.
+* Target groups for the HTTPS listener.
 * Security Groups for the ALB.
 
 The HTTP listener redirects to HTTPS.
