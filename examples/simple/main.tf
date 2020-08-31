@@ -33,18 +33,6 @@ module "logs" {
   ]
 }
 
-resource "aws_route53_record" "main" {
-  zone_id = local.zone_name
-  name    = var.test_name
-  type    = "CNAME"
-  ttl     = "300"
-  records = [module.alb.alb_dns_name]
-}
-
-# data "aws_route53_zone" "infra_truss_coffee" {
-#   name = local.zone_name
-# }
-
 module "acm-cert" {
   source  = "trussworks/acm-cert/aws"
   version = "~> 2"
@@ -52,6 +40,18 @@ module "acm-cert" {
   domain_name = "${var.test_name}.${local.zone_name}"
   environment = local.environment
   zone_name   = local.zone_name
+}
+
+data "aws_route53_zone" "infra_truss_coffee" {
+  name = local.zone_name
+}
+
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.infra_truss_coffee.zone_id
+  name    = var.test_name
+  type    = "CNAME"
+  ttl     = "300"
+  records = [module.alb.alb_dns_name]
 }
 
 module "vpc" {
@@ -153,4 +153,3 @@ module "ecs-service" {
   ]
 
 }
-
