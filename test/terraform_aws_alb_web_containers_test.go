@@ -49,9 +49,8 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 	dnsEndpoint := terraform.Output(t, terraformOptions, "dns_endpoint")
 	testURL := fmt.Sprintf("https://%s/", dnsEndpoint)
 	expectedText := "Hello, world!"
-	tlsConfig := tls.Config{
-		MinVersion: tls.VersionTLS13,
-	}
+	tlsConfig := tls.Config{}
+
 	maxRetries := 10
 	timeBetweenRetries := 10 * time.Second
 
