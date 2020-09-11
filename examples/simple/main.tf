@@ -24,9 +24,8 @@ module "alb" {
 
 module "logs" {
   source         = "trussworks/logs/aws"
-  version        = "~> 8"
+  version        = "~> 10"
   s3_bucket_name = var.logs_bucket
-  region         = var.region
   force_destroy  = true
   alb_logs_prefixes = [
     "alb/${var.test_name}-${local.environment}"
