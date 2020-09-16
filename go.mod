@@ -1,5 +1,5 @@
 module github.com/trussworks/terraform-aws-alb-web-containers
 
-go 1.13
+go 1.15
 
 require github.com/gruntwork-io/terratest v0.28.12
