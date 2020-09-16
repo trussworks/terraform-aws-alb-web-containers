@@ -40,7 +40,7 @@ module "app_alb" {
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.0 |
+| terraform | ~> 0.13 |
 | aws | ~> 2.70 |
 
 ## Providers
