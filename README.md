@@ -43,13 +43,13 @@ module "app_alb" {
 | Name | Version |
 |------|---------|
 | terraform | ~> 0.13 |
-| aws | ~> 2.70 |
+| aws | >= 2.70, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.70 |
+| aws | >= 2.70, < 4.0 |
 
 ## Inputs
 
@@ -73,8 +73,10 @@ module "app_alb" {
 | health\_check\_success\_codes | The HTTP codes to use when checking for a successful response from the container. You can specify multiple values (for example, '200,202') or a range of values (for example, '200-299'). | `string` | `"200"` | no |
 | health\_check\_timeout | The health check timeout. Minimum value 2 seconds, Maximum value 60 seconds. Default 5 seconds. | `string` | `5` | no |
 | healthy\_threshold | The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 3. | `string` | `3` | no |
+| load\_balancing\_algorithm\_type | Determines how the load balancer selects targets when routing requests.  Default is round\_robin. | `string` | `"round_robin"` | no |
 | logs\_s3\_bucket | S3 bucket for storing Application Load Balancer logs. | `string` | n/a | yes |
 | name | The service name. | `string` | n/a | yes |
+| slow\_start | The amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable. The default value is 0. | `number` | `0` | no |
 | target\_group\_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]. | `string` | `""` | no |
 | unhealthy\_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy\_threshold. Defaults to 3. | `string` | `3` | no |
 
