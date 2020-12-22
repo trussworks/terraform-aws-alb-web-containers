@@ -24,9 +24,8 @@ module "alb" {
 
 module "logs" {
   source         = "trussworks/logs/aws"
-  version        = "~> 8"
+  version        = "~> 8.5"
   s3_bucket_name = var.logs_bucket
-  region         = var.region
   force_destroy  = true
   alb_logs_prefixes = [
     "alb/${var.test_name}-${local.environment}"
@@ -35,7 +34,7 @@ module "logs" {
 
 module "acm-cert" {
   source  = "trussworks/acm-cert/aws"
-  version = "~> 2"
+  version = "~> 2.5"
 
   domain_name = "${var.test_name}.${local.zone_name}"
   environment = local.environment
@@ -56,7 +55,7 @@ resource "aws_route53_record" "main" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 2"
+  version = "~> 2.64"
 
   name            = var.test_name
   cidr            = "10.0.0.0/16"
@@ -129,7 +128,7 @@ resource "aws_ecs_cluster" "main" {
 
 module "ecs-service" {
   source  = "trussworks/ecs-service/aws"
-  version = "~> 3"
+  version = "~> 3.2"
 
   name        = var.test_name
   environment = local.environment
