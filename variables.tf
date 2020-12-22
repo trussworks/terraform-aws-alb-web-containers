@@ -58,6 +58,18 @@ variable "deregistration_delay" {
   default     = 90
 }
 
+variable "load_balancing_algorithm_type" {
+  description = "Determines how the load balancer selects targets when routing requests.  Default is round_robin."
+  type        = string
+  default     = "round_robin"
+}
+
+variable "slow_start" {
+  description = "The amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable. The default value is 0."
+  type        = number
+  default     = 0
+}
+
 variable "health_check_interval" {
   description = "The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds."
   type        = string

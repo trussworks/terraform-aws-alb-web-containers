@@ -85,7 +85,9 @@ resource "aws_lb_target_group" "https" {
 
   # The amount time for the LB to wait before changing the state of a
   # deregistering target from draining to unused. AWS default is 300 seconds.
-  deregistration_delay = var.deregistration_delay
+  deregistration_delay          = var.deregistration_delay
+  slow_start                    = var.slow_start
+  load_balancing_algorithm_type = var.load_balancing_algorithm_type
 
   health_check {
     timeout             = var.health_check_timeout
@@ -140,4 +142,3 @@ resource "aws_lb_listener_certificate" "main" {
   listener_arn    = aws_lb_listener.https.arn
   certificate_arn = element(var.alb_certificate_arns, count.index)
 }
-
