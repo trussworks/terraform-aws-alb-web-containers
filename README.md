@@ -14,9 +14,7 @@ The HTTPS listener uses a certificate stored in ACM or IAM.
 
 Terraform 0.13. Pin module version to ~> 5.X. Submit pull-requests to master branch.
 
-Terraform 0.12. Pin module version to ~> 4.X. Submit pull-requests to terraform011 branch.
-
-Terraform 0.11. Pin module version to ~> 2.6.1. Submit pull-requests to terraform011 branch.
+Terraform 0.12. Pin module version to ~> 4.X. Submit pull-requests to terraform012 branch.
 
 ## Usage
 
@@ -42,14 +40,14 @@ module "app_alb" {
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.13 |
-| aws | >= 2.70, < 4.0 |
+| terraform | >= 0.13 |
+| aws | >= 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.70, < 4.0 |
+| aws | >= 3.0 |
 
 ## Inputs
 
