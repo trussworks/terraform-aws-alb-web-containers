@@ -63,7 +63,7 @@ resource "aws_lb" "main" {
   idle_timeout    = var.alb_idle_timeout
 
   access_logs {
-    enabled = true
+    enabled = var.logs_s3_bucket == "" ? false : true
     bucket  = var.logs_s3_bucket
     prefix  = "alb/${var.name}-${var.environment}"
   }
