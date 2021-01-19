@@ -65,10 +65,14 @@ resource "aws_lb" "main" {
   security_groups = [aws_security_group.alb_sg.id]
   idle_timeout    = var.alb_idle_timeout
 
-  access_logs {
-    enabled = var.logs_s3_bucket == "" ? false : true
-    bucket  = var.logs_s3_bucket
-    prefix  = "alb/${var.name}-${var.environment}"
+  dynamic "access_logs" {
+    # Skips creating the block if logs_s3_bucket is empty string
+    for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
+    content {
+      enabled = true
+      bucket  = var.logs_s3_bucket
+      prefix  = "alb/${var.name}-${var.environment}"
+    }
   }
 
   tags = {
