@@ -135,3 +135,9 @@ variable "target_group_name" {
   type        = string
   default     = ""
 }
+
+variable "security_group_tags" {
+  description = "A map of tags to add to the ALB's security group."
+  type        = map(string)
+  default     = {}
+}
