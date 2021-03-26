@@ -7,11 +7,14 @@ resource "aws_security_group" "alb_sg" {
   description = "${var.name}-${var.environment} ALB security group"
   vpc_id      = var.alb_vpc_id
 
-  tags = {
-    Name        = "alb-${var.name}-${var.environment}"
-    Environment = var.environment
-    Automation  = "Terraform"
-  }
+  tags = merge(
+    var.security_group_tags,
+    {
+      Name        = "alb-${var.name}-${var.environment}"
+      Environment = var.environment
+      Automation  = "Terraform"
+    },
+  )
 }
 
 resource "aws_security_group_rule" "app_alb_allow_outbound" {
