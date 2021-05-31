@@ -2,4 +2,4 @@ module github.com/trussworks/terraform-aws-alb-web-containers
 
 go 1.16
 
-require github.com/gruntwork-io/terratest v0.34.8
+require github.com/gruntwork-io/terratest v0.35.1
