@@ -9,7 +9,7 @@ variable "environment" {
 }
 
 variable "logs_s3_bucket" {
-  description = "S3 bucket for storing Application Load Balancer logs."
+  description = "S3 bucket for storing access logs. Set to empty string to disable logs."
   type        = string
 }
 
