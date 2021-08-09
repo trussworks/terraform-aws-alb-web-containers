@@ -14,7 +14,7 @@ variable "logs_s3_bucket" {
 }
 
 variable "logs_s3_prefix" {
-  description = "S3 key prefix for ALB logs"
+  description = "Overrides prefix for ALB logs"
   default     = ""
   type        = string
 }
