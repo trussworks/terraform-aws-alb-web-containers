@@ -21,6 +21,7 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 
 	testName := fmt.Sprintf("terratest-%s", strings.ToLower(random.UniqueId()))
 	loggingBucket := fmt.Sprintf("%s-logs", testName)
+	loggingPrefix := fmt.Sprintf("alb/%s", testName)
 	awsRegion := "us-west-2"
 	vpcAzs := aws.GetAvailabilityZones(t, awsRegion)[:3]
 
@@ -32,7 +33,7 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 		Vars: map[string]interface{}{
 			"test_name":   testName,
 			"logs_bucket": loggingBucket,
-			"logs_prefix": "testName",
+			"logs_prefix": loggingPrefix,
 			"vpc_azs":     vpcAzs,
 			"region":      awsRegion,
 		},
@@ -76,7 +77,7 @@ func TestTerraformAwsAlbWebContainersSimpleHttpDisabledLogs(t *testing.T) {
 		Vars: map[string]interface{}{
 			"test_name":   testName,
 			"logs_bucket": "", // this is the option being tested
-			"logs_prefix": "testName",
+			"logs_prefix": "",
 			"vpc_azs":     vpcAzs,
 			"region":      awsRegion,
 		},
