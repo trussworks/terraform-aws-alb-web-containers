@@ -65,7 +65,7 @@ func TestTerraformAwsAlbWebContainersSimpleHttpCustomPrefix(t *testing.T) {
 
 	testName := fmt.Sprintf("terratest-%s", strings.ToLower(random.UniqueId()))
 	loggingBucket := fmt.Sprintf("%s-logs", testName)
-	loggingPrefix := "alb"
+	loggingPrefix := fmt.Sprintf("alb-%s", testName)
 	awsRegion := "us-west-2"
 	vpcAzs := aws.GetAvailabilityZones(t, awsRegion)[:3]
 

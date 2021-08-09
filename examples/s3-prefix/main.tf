@@ -12,7 +12,7 @@ module "alb" {
   name           = var.test_name
   environment    = local.environment
   logs_s3_bucket = var.logs_bucket == "" ? "" : module.logs[0].aws_logs_bucket
-  logs_s3_prefix = "alb"
+  logs_s3_prefix = var.logs_prefix
 
   alb_vpc_id                  = module.vpc.vpc_id
   alb_subnet_ids              = module.vpc.public_subnets
@@ -31,7 +31,7 @@ module "logs" {
   s3_bucket_name = var.logs_bucket
   force_destroy  = true
   alb_logs_prefixes = [
-    "alb"
+    var.logs_prefix
   ]
 }
 
