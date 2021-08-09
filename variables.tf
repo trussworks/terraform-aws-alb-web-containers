@@ -15,7 +15,7 @@ variable "logs_s3_bucket" {
 
 variable "logs_s3_prefix" {
   description = "S3 key prefix for ALB logs"
-  default     = "alb"
+  default     = ""
   type        = string
 }
 
