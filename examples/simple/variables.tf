@@ -2,6 +2,10 @@ variable "logs_bucket" {
   type = string
 }
 
+variable "logs_prefix" {
+  type = string
+}
+
 variable "region" {
   type = string
 }

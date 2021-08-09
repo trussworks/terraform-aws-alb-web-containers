@@ -71,7 +71,7 @@ resource "aws_lb" "main" {
     content {
       enabled = true
       bucket  = var.logs_s3_bucket
-      prefix  = "alb/${var.name}-${var.environment}"
+      prefix  = var.logs_s3_prefix
     }
   }
 

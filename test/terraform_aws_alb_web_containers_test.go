@@ -32,6 +32,7 @@ func TestTerraformAwsAlbWebContainersSimpleHttp(t *testing.T) {
 		Vars: map[string]interface{}{
 			"test_name":   testName,
 			"logs_bucket": loggingBucket,
+			"logs_prefix": "testName",
 			"vpc_azs":     vpcAzs,
 			"region":      awsRegion,
 		},

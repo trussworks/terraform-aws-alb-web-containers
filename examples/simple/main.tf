@@ -30,7 +30,7 @@ module "logs" {
   s3_bucket_name = var.logs_bucket
   force_destroy  = true
   alb_logs_prefixes = [
-    "alb/${var.test_name}-${local.environment}"
+    var.logs_prefix
   ]
 }
 
