@@ -13,6 +13,12 @@ variable "logs_s3_bucket" {
   type        = string
 }
 
+variable "logs_s3_prefix" {
+  description = "Overrides prefix for ALB logs"
+  default     = ""
+  type        = string
+}
+
 variable "alb_default_certificate_arn" {
   description = "The ARN of the default certificate to be attached to the ALB."
   type        = string
