@@ -13,6 +13,12 @@ variable "logs_s3_bucket" {
   type        = string
 }
 
+variable "logs_s3_prefix_enabled" {
+  description = "Toggle for ALB logs S3 prefix"
+  default     = true
+  type        = bool
+}
+
 variable "logs_s3_prefix" {
   description = "Overrides prefix for ALB logs"
   default     = ""
