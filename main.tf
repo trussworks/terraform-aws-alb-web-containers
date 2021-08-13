@@ -71,7 +71,7 @@ resource "aws_lb" "main" {
     content {
       enabled = true
       bucket  = var.logs_s3_bucket
-      prefix  = var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix
+      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
     }
   }
 
