@@ -92,7 +92,7 @@ No modules.
 | <a name="input_load_balancing_algorithm_type"></a> [load\_balancing\_algorithm\_type](#input\_load\_balancing\_algorithm\_type) | Determines how the load balancer selects targets when routing requests.  Default is round\_robin. | `string` | `"round_robin"` | no |
 | <a name="input_logs_s3_bucket"></a> [logs\_s3\_bucket](#input\_logs\_s3\_bucket) | S3 bucket for storing access logs. Set to empty string to disable logs. | `string` | n/a | yes |
 | <a name="input_logs_s3_prefix"></a> [logs\_s3\_prefix](#input\_logs\_s3\_prefix) | Overrides prefix for ALB logs | `string` | `""` | no |
-| <a name="input_logs_s3_prefix_enabled"></a> [logs\_s3\_prefix\_enabled](#input\_logs\_s3\_prefix\_enabled) | Toggle for alb logs S3 prefix | `string` | `true` | no |
+| <a name="input_logs_s3_prefix_enabled"></a> [logs\_s3\_prefix\_enabled](#input\_logs\_s3\_prefix\_enabled) | Toggle for ALB logs S3 prefix | `string` | `true` | no |
 | <a name="input_name"></a> [name](#input\_name) | The service name. | `string` | n/a | yes |
 | <a name="input_security_group_tags"></a> [security\_group\_tags](#input\_security\_group\_tags) | A map of tags to add to the ALB's security group. | `map(string)` | `{}` | no |
 | <a name="input_slow_start"></a> [slow\_start](#input\_slow\_start) | The amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable. The default value is 0. | `number` | `0` | no |
