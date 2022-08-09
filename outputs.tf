@@ -1,6 +1,6 @@
 output "alb_security_group_id" {
   description = "Security Group ID assigned to the ALB."
-  value       = aws_security_group.alb_sg.id
+  value       = local.security_group
 }
 
 output "alb_target_group_id" {
