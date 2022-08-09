@@ -153,3 +153,9 @@ variable "security_group_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "security_group" {
+  description = "SG for the ALB"
+  type        = string
+  default     = ""
+}
