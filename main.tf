@@ -3,6 +3,8 @@
 #
 
 resource "aws_security_group" "alb_sg" {
+  count = var.security_group == "" ? 1 : 0
+
   name        = "alb-${var.name}-${var.environment}"
   description = "${var.name}-${var.environment} ALB security group"
   vpc_id      = var.alb_vpc_id
@@ -17,9 +19,15 @@ resource "aws_security_group" "alb_sg" {
   )
 }
 
+locals {
+  security_group = "${var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group}"
+}
+
 resource "aws_security_group_rule" "app_alb_allow_outbound" {
+  count = var.security_group == "" ? 1 : 0
+
   description       = "All outbound"
-  security_group_id = aws_security_group.alb_sg.id
+  security_group_id = aws_security_group.alb_sg[0].id
 
   type        = "egress"
   from_port   = 0
@@ -29,10 +37,10 @@ resource "aws_security_group_rule" "app_alb_allow_outbound" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
-  count = var.allow_public_https ? 1 : 0
+  count = var.security_group == "" && var.allow_public_https ? 1 : 0
 
   description       = "Allow in HTTPS"
-  security_group_id = aws_security_group.alb_sg.id
+  security_group_id = aws_security_group.alb_sg[0].id
 
   type        = "ingress"
   from_port   = 443
@@ -42,10 +50,10 @@ resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
 }
 
 resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
-  count = var.allow_public_http ? 1 : 0
+  count = var.security_group == "" && var.allow_public_http ? 1 : 0
 
   description       = "Allow in HTTP"
-  security_group_id = aws_security_group.alb_sg.id
+  security_group_id = aws_security_group.alb_sg[0].id
 
   type        = "ingress"
   from_port   = 80
@@ -62,7 +70,7 @@ resource "aws_lb" "main" {
   name            = "${var.name}-${var.environment}"
   internal        = var.alb_internal
   subnets         = var.alb_subnet_ids
-  security_groups = [aws_security_group.alb_sg.id]
+  security_groups = [local.security_group]
   idle_timeout    = var.alb_idle_timeout
 
   dynamic "access_logs" {
