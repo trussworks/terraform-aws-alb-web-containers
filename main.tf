@@ -20,7 +20,7 @@ resource "aws_security_group" "alb_sg" {
 }
 
 locals {
-  security_group = "${var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group}"
+  security_group = var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group
 }
 
 resource "aws_security_group_rule" "app_alb_allow_outbound" {
