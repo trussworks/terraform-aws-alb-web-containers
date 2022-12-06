@@ -37,4 +37,3 @@ output "alb_listener_arn" {
   description = "The ARN associated with the HTTPS listener on the ALB."
   value       = aws_lb_listener.https.arn
 }
-
