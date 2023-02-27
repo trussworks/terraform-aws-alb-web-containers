@@ -35,7 +35,7 @@ module "app_alb" {
 }
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -112,7 +112,7 @@ No modules.
 | alb\_security\_group\_id | Security Group ID assigned to the ALB. |
 | alb\_target\_group\_id | ID of the target group with the HTTPS listener. |
 | alb\_zone\_id | Route53 hosted zone ID associated with the ALB. |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## Developer Setup
 
