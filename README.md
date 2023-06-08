@@ -10,12 +10,6 @@ The HTTP listener redirects to HTTPS.
 
 The HTTPS listener uses a certificate stored in ACM or IAM.
 
-## Terraform Versions
-
-Terraform 0.13. Pin module version to ~> 5.X. Submit pull-requests to master branch.
-
-Terraform 0.12. Pin module version to ~> 4.X. Submit pull-requests to terraform012 branch.
-
 ## Usage
 
 ```hcl
@@ -40,7 +34,7 @@ module "app_alb" {
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.15.2 |
+| terraform | >= 1.0 |
 | aws | >= 3.0 |
 
 ## Providers
