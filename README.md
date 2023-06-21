@@ -77,6 +77,7 @@ No modules.
 | container\_port | The port on which the container will receive traffic. | `string` | `443` | no |
 | container\_protocol | The protocol to use to connect with the container. | `string` | `"HTTPS"` | no |
 | deregistration\_delay | The amount time for the LB to wait before changing the state of a deregistering target from draining to unused. Default is 90s. | `string` | `90` | no |
+| enable\_deletion\_protection | If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer | `string` | `false` | no |
 | environment | Environment tag, e.g prod. | `string` | n/a | yes |
 | health\_check\_interval | The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds. | `string` | `30` | no |
 | health\_check\_path | The destination for the health check requests to the container. | `string` | `"/"` | no |
