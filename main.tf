@@ -73,6 +73,8 @@ resource "aws_lb" "main" {
   security_groups = [local.security_group]
   idle_timeout    = var.alb_idle_timeout
 
+  enable_deletion_protection = var.enable_deletion_protection
+
   dynamic "access_logs" {
     # Skips creating the block if logs_s3_bucket is empty string
     for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
