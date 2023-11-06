@@ -11,11 +11,6 @@ resource "aws_security_group" "alb_sg" {
 
   tags = merge(
     var.security_group_tags,
-    {
-      Name        = "alb-${var.name}-${var.environment}"
-      Environment = var.environment
-      Automation  = "Terraform"
-    },
   )
 }
 
@@ -85,10 +80,6 @@ resource "aws_lb" "main" {
     }
   }
 
-  tags = {
-    Environment = var.environment
-    Automation  = "Terraform"
-  }
 }
 
 resource "aws_lb_target_group" "https" {
@@ -119,10 +110,6 @@ resource "aws_lb_target_group" "https" {
   # Ensure the ALB exists before things start referencing this target group.
   depends_on = [aws_lb.main]
 
-  tags = {
-    Environment = var.environment
-    Automation  = "Terraform"
-  }
 }
 
 resource "aws_lb_listener" "http" {
