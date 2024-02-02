@@ -76,7 +76,9 @@ No modules.
 | allow\_public\_https | Allow inbound access from the Internet to port 443 | `string` | `true` | no |
 | container\_port | The port on which the container will receive traffic. | `string` | `443` | no |
 | container\_protocol | The protocol to use to connect with the container. | `string` | `"HTTPS"` | no |
+| container\_protocol\_version | The protocol version to use with the container. | `string` | `"HTTP1"` | no |
 | deregistration\_delay | The amount time for the LB to wait before changing the state of a deregistering target from draining to unused. Default is 90s. | `string` | `90` | no |
+| desync\_mitigation\_mode | Specifies how the load balancer handles security issues related to HTTP desync | `string` | `"defensive"` | no |
 | enable\_deletion\_protection | If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer | `string` | `false` | no |
 | environment | Environment tag, e.g prod. | `string` | n/a | yes |
 | health\_check\_interval | The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds. Default 30 seconds. | `string` | `30` | no |
