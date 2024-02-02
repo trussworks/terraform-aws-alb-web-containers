@@ -67,6 +67,7 @@ resource "aws_lb" "main" {
   subnets         = var.alb_subnet_ids
   security_groups = [local.security_group]
   idle_timeout    = var.alb_idle_timeout
+  desync_mitigation_mode = var.desync_mitigation_mode
 
   enable_deletion_protection = var.enable_deletion_protection
 
@@ -88,6 +89,7 @@ resource "aws_lb_target_group" "https" {
   name        = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
   port        = var.container_port
   protocol    = var.container_protocol
+  protocol_version = var.container_protocol_version
   vpc_id      = var.alb_vpc_id
   target_type = "ip"
 
