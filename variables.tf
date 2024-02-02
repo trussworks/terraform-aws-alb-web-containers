@@ -63,8 +63,8 @@ variable "container_protocol" {
 
 variable "container_protocol_version" {
   description = "The protocol version to use with the container."
-  type = string
-  default = "HTTP1"
+  type        = string
+  default     = "HTTP1"
 }
 
 variable "deregistration_delay" {
@@ -75,8 +75,8 @@ variable "deregistration_delay" {
 
 variable "desync_mitigation_mode" {
   description = "Specifies how the load balancer handles security issues related to HTTP desync"
-  type = string
-  default = "defensive"
+  type        = string
+  default     = "defensive"
 }
 
 variable "enable_deletion_protection" {

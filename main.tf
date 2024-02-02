@@ -62,11 +62,11 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 #
 
 resource "aws_lb" "main" {
-  name            = "${var.name}-${var.environment}"
-  internal        = var.alb_internal
-  subnets         = var.alb_subnet_ids
-  security_groups = [local.security_group]
-  idle_timeout    = var.alb_idle_timeout
+  name                   = "${var.name}-${var.environment}"
+  internal               = var.alb_internal
+  subnets                = var.alb_subnet_ids
+  security_groups        = [local.security_group]
+  idle_timeout           = var.alb_idle_timeout
   desync_mitigation_mode = var.desync_mitigation_mode
 
   enable_deletion_protection = var.enable_deletion_protection
@@ -86,12 +86,12 @@ resource "aws_lb" "main" {
 resource "aws_lb_target_group" "https" {
   # Name must be less than or equal to 32 characters, or AWS API returns error.
   # Error: "name" cannot be longer than 32 characters
-  name        = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
-  port        = var.container_port
-  protocol    = var.container_protocol
+  name             = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
+  port             = var.container_port
+  protocol         = var.container_protocol
   protocol_version = var.container_protocol_version
-  vpc_id      = var.alb_vpc_id
-  target_type = "ip"
+  vpc_id           = var.alb_vpc_id
+  target_type      = "ip"
 
   # The amount time for the LB to wait before changing the state of a
   # deregistering target from draining to unused. AWS default is 300 seconds.
