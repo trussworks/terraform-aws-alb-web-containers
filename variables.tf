@@ -61,10 +61,22 @@ variable "container_protocol" {
   default     = "HTTPS"
 }
 
+variable "container_protocol_version" {
+  description = "The protocol version to use with the container."
+  type        = string
+  default     = "HTTP1"
+}
+
 variable "deregistration_delay" {
   description = "The amount time for the LB to wait before changing the state of a deregistering target from draining to unused. Default is 90s."
   type        = string
   default     = 90
+}
+
+variable "desync_mitigation_mode" {
+  description = "Specifies how the load balancer handles security issues related to HTTP desync"
+  type        = string
+  default     = "defensive"
 }
 
 variable "enable_deletion_protection" {
