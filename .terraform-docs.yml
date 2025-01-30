@@ -1,4 +1,50 @@
+formatter: "markdown table"
+
+version: ">= 0.19.0, < 1.0.0"
+
+recursive:
+  enabled: false
+  include-main: false
+
 settings:
   html: false
   anchor: false
-formatter: "markdown table"
+  escape: false
+  lockfile: false
+  hide-empty: true
+
+sort:
+  enabled: true
+  by: required
+
+sections:
+  show:
+    - providers
+    - requirements
+    - inputs
+    - outputs
+    - resources
+    - data-sources
+
+content: |-
+  ***
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+  {{ .Providers }}
+
+  {{ .Requirements }}
+
+  {{ .Resources }}
+
+  ***
+
+output:
+  file: README.md
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->

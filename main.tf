@@ -2,7 +2,7 @@
 # SG - ALB
 #
 
-resource "aws_security_group" "alb_sg" {
+resource "aws_security_group" "alb" {
   count = var.security_group == "" ? 1 : 0
 
   name        = "alb-${var.name}-${var.environment}"
@@ -18,43 +18,38 @@ locals {
   security_group = var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group
 }
 
-resource "aws_security_group_rule" "app_alb_allow_outbound" {
+resource "aws_vpc_security_group_egress_rule" "alb_allow_outbound" {
   count = var.security_group == "" ? 1 : 0
 
-  description       = "All outbound"
+  description       = "Allow all outbound"
   security_group_id = aws_security_group.alb_sg[0].id
 
-  type        = "egress"
-  from_port   = 0
-  to_port     = 0
-  protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
+  ip_protocol = "-1"
+  cidr_ipv4   = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "app_alb_allow_https_from_world" {
+resource "aws_vpc_security_group_ingress_rule" "alb_allow_https" {
   count = var.security_group == "" && var.allow_public_https ? 1 : 0
 
-  description       = "Allow in HTTPS"
+  description       = "Allow all HTTPS"
   security_group_id = aws_security_group.alb_sg[0].id
 
-  type        = "ingress"
   from_port   = 443
   to_port     = 443
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  ip_protocol = "tcp"
+  cidr_ipv4   = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
+resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
   count = var.security_group == "" && var.allow_public_http ? 1 : 0
 
-  description       = "Allow in HTTP"
+  description       = "Allow all HTTP"
   security_group_id = aws_security_group.alb_sg[0].id
 
-  type        = "ingress"
   from_port   = 80
   to_port     = 80
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  ip_protocol = "tcp"
+  cidr_ipv4   = ["0.0.0.0/0"]
 }
 
 #
@@ -62,12 +57,15 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 #
 
 resource "aws_lb" "main" {
-  name                   = "${var.name}-${var.environment}"
-  internal               = var.alb_internal
-  subnets                = var.alb_subnet_ids
-  security_groups        = [local.security_group]
-  idle_timeout           = var.alb_idle_timeout
-  desync_mitigation_mode = var.desync_mitigation_mode
+  name                       = "${var.name}-${var.environment}"
+  drop_invalid_header_fields = true
+  enable_waf_fail_open       = var.enable_waf_fail_open
+  internal                   = var.alb_internal
+  preserve_host_header       = var.preserve_host_header
+  subnets                    = var.alb_subnet_ids
+  security_groups            = [local.security_group]
+  idle_timeout               = var.alb_idle_timeout
+  desync_mitigation_mode     = var.desync_mitigation_mode
 
   enable_deletion_protection = var.enable_deletion_protection
 
@@ -75,7 +73,16 @@ resource "aws_lb" "main" {
     # Skips creating the block if logs_s3_bucket is empty string
     for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
     content {
-      enabled = true
+      enabled = var.access_logs
+      bucket  = var.logs_s3_bucket
+      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
+    }
+  }
+
+  dynamic "connection_logs" {
+    for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
+    content {
+      enabled = var.connection_logs
       bucket  = var.logs_s3_bucket
       prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
     }

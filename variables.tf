@@ -1,3 +1,9 @@
+variable "access_logs" {
+  description = "Enable Access Logs"
+  type        = bool
+  default     = false
+}
+
 variable "alb_certificate_arns" {
   description = "The ARNs of the certificates to be attached to the ALB."
   type        = list(string)
@@ -22,9 +28,9 @@ variable "alb_internal" {
 }
 
 variable "alb_ssl_policy" {
-  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>."
+  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
   type        = string
-  default     = "ELBSecurityPolicy-2016-08"
+  default     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 }
 
 variable "alb_subnet_ids" {
@@ -47,6 +53,12 @@ variable "allow_public_https" {
   description = "Allow inbound access from the Internet to port 443"
   type        = string
   default     = true
+}
+
+variable "connection_logs" {
+  description = "Enable Connection Logs"
+  type        = bool
+  default     = false
 }
 
 variable "container_port" {
@@ -74,14 +86,20 @@ variable "deregistration_delay" {
 }
 
 variable "desync_mitigation_mode" {
-  description = "Specifies how the load balancer handles security issues related to HTTP desync"
+  description = "How the load balancer handles requests that might pose a security risk to an application due to HTTP desync. Valid values are monitor, defensive (default), strictest."
   type        = string
   default     = "defensive"
 }
 
 variable "enable_deletion_protection" {
   description = " If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer"
-  type        = string
+  type        = bool
+  default     = false
+}
+
+variable "enable_waf_fail_open" {
+  description = "Whether to allow a WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. Defaults to false."
+  type        = bool
   default     = false
 }
 
@@ -146,6 +164,12 @@ variable "logs_s3_prefix_enabled" {
 variable "name" {
   description = "The service name."
   type        = string
+}
+
+variable "preserve_host_header" {
+  description = "Whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change. Defaults to false."
+  type        = bool
+  default     = false
 }
 
 variable "security_group" {
