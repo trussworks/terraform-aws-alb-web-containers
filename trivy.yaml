@@ -1,0 +1,16 @@
+quiet: true
+
+scan:
+  skip-dirs:
+    - "**/.terraform"
+    - "s3-prefix*"
+    - "simple"
+    - "examples/*"
+misconfiguration:
+  scanners:
+    - terraform
+
+  terraform:
+    exclude-downloaded-modules: true
+
+ignorefile: ".trivyignore.yaml"
