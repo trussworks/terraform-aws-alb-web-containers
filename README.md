@@ -73,7 +73,7 @@ module "app_alb" {
 | security_group | User-defined Security Group for the ALB. Defining a Security Group here will cause the module to not create a Security Group for the ALB. | `string` | `null` | no |
 | security_group_tags | A map of tags to add to the ALB's security group. | `map(string)` | `{}` | no |
 | slow_start | The amount time for targets to warm up before the load balancer sends them a full share of requests. The range is 30-900 seconds or 0 to disable. The default value is 0. | `number` | `0` | no |
-| target_group_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]. | `string` | `""` | no |
+| target_group_name | Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: [environment]-[name]-ecs-[protocol]. | `string` | `""` | no |
 | unhealthy_threshold | The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold. Defaults to 3. | `string` | `3` | no |
 
 ## Outputs

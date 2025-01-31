@@ -9,6 +9,7 @@ target_lock:
 .PHONY: check
 check:
 	tflint
+	terraform validate
 	trivy config .
 
 .PHONY: docs

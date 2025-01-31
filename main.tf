@@ -5,7 +5,7 @@
 resource "aws_security_group" "alb" {
   count = var.security_group == null ? 1 : 0
 
-  name        = "alb-${var.name}-${var.environment}"
+  name        = "${var.environment}-${var.name}-alb"
   description = "${var.name}-${var.environment} ALB security group"
   vpc_id      = var.alb_vpc_id
 
@@ -27,6 +27,10 @@ resource "aws_vpc_security_group_egress_rule" "alb_allow_outbound" {
 
   ip_protocol = "-1"
   cidr_ipv4   = "0.0.0.0/0"
+
+  tags = {
+    Name = "Allow All Outbound"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_allow_https" {
@@ -39,6 +43,11 @@ resource "aws_vpc_security_group_ingress_rule" "alb_allow_https" {
   to_port     = 443
   ip_protocol = "tcp"
   cidr_ipv4   = "0.0.0.0/0"
+
+  tags = {
+    Name = "Allow All HTTPS"
+  }
+
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
@@ -51,6 +60,10 @@ resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
   to_port     = 80
   ip_protocol = "tcp"
   cidr_ipv4   = "0.0.0.0/0"
+
+  tags = {
+    Name = "Allow All HTTP"
+  }
 }
 
 #
@@ -58,7 +71,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
 #
 
 resource "aws_lb" "main" {
-  name                       = "${var.name}-${var.environment}"
+  name                       = "${var.environment}-${var.name}"
   drop_invalid_header_fields = var.drop_invalid_header_fields
   enable_waf_fail_open       = var.enable_waf_fail_open
   internal                   = var.alb_internal
@@ -76,7 +89,7 @@ resource "aws_lb" "main" {
     content {
       enabled = var.enable_access_logs
       bucket  = var.logs_s3_bucket
-      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
+      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.environment}-${var.name}" : var.logs_s3_prefix) : ""
     }
   }
 
@@ -85,7 +98,7 @@ resource "aws_lb" "main" {
     content {
       enabled = var.enable_connection_logs
       bucket  = var.logs_s3_bucket
-      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
+      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.environment}-${var.name}" : var.logs_s3_prefix) : ""
     }
   }
 
@@ -98,7 +111,7 @@ resource "aws_lb" "main" {
 resource "aws_lb_target_group" "https" {
   # Name must be less than or equal to 32 characters, or AWS API returns error.
   # Error: "name" cannot be longer than 32 characters
-  name             = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
+  name             = coalesce(var.target_group_name, format("%s-%s-ecs-https", var.environment, var.name))
   port             = var.container_port
   protocol         = var.container_protocol
   protocol_version = var.container_protocol_version

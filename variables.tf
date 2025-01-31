@@ -204,7 +204,7 @@ variable "slow_start" {
 }
 
 variable "target_group_name" {
-  description = "Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]."
+  description = "Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: [environment]-[name]-ecs-[protocol]."
   type        = string
   default     = ""
 }
