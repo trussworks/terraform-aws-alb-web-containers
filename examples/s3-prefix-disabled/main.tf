@@ -11,6 +11,7 @@ module "alb" {
 
   name                   = var.test_name
   environment            = local.environment
+  enable_access_logs     = true
   logs_s3_bucket         = var.logs_bucket == "" ? "" : module.logs[0].aws_logs_bucket
   logs_s3_prefix_enabled = false
 
@@ -27,7 +28,8 @@ module "logs" {
   count = var.logs_bucket == "" ? 0 : 1
 
   source         = "trussworks/logs/aws"
-  version        = "~> 10"
+  version        = "~> 17"
+  allow_alb      = true
   s3_bucket_name = var.logs_bucket
   force_destroy  = true
   alb_logs_prefixes = [
@@ -37,11 +39,10 @@ module "logs" {
 
 module "acm-cert" {
   source  = "trussworks/acm-cert/aws"
-  version = "~> 3"
+  version = "~> 7"
 
   domain_name = "${var.test_name}.${local.zone_name}"
-  environment = local.environment
-  zone_name   = local.zone_name
+  zone_id     = data.aws_route53_zone.infra_truss_coffee.zone_id
 }
 
 data "aws_route53_zone" "infra_truss_coffee" {
@@ -57,17 +58,22 @@ resource "aws_route53_record" "main" {
 }
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 2.64.0"
+  source = "terraform-aws-modules/vpc/aws"
 
-  name            = var.test_name
-  cidr            = "10.0.0.0/16"
-  azs             = var.vpc_azs
-  private_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
-  public_subnets  = ["10.0.104.0/24", "10.0.105.0/24", "10.0.106.0/24"]
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
   enable_nat_gateway = true
-  single_nat_gateway = true
+  enable_vpn_gateway = true
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
 }
 
 #
