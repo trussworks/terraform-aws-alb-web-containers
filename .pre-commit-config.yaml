@@ -3,33 +3,52 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-json
-      - id: check-merge-conflict
+        name: "Check JSON"
       - id: check-yaml
-      - id: detect-private-key
+        name: "Check YAML"
+        args:
+          - --allow-multiple-documents
+      - id: check-merge-conflict
+        name: "Check Merge Conflicts"
       - id: pretty-format-json
+        name: "Pretty Format JSON"
         args:
           - --autofix
       - id: trailing-whitespace
-      - id: check-symlinks
+        name: "Trailing Whitespace"
+        args:
+          - --markdown-linebreak-ext=md
       - id: end-of-file-fixer
+        name: "EOF Fixer"
       - id: mixed-line-ending
+        name: "Mixed Line Ending"
 
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.21
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.31.1
     hooks:
-      - id: mdformat
-        additional_dependencies:
-          - mdformat-gfm
-          - mdformat-toc
-        # mdformat fights with terraform_docs
-        exclude: README.m(ark)?d(own)?
+      - id: check-renovate
+      - id: check-github-workflows
+      - id: check-jsonschema
+        name: "Validate Pre-Commit"
+        files: ^\.pre-commit-config.yaml+$
+        types:
+          - yaml
+        args: ["--schemafile", "schemas/pre-commit-config.json"]
+      - id: check-jsonschema
+        name: "Validate MarkdownLint"
+        files: ^\.markdownlint.yml+$
+        types:
+          - yaml
+        args: ["--schemafile", "schemas/markdownlint-config-schema.json"]
+
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.19.0
+    hooks:
+      - id: terraform-docs-system
+        name: "Terraform Docs"
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.17.2
     hooks:
       - id: markdownlint-cli2
-
-  - repo: https://github.com/terraform-docs/terraform-docs
-    rev: "v0.19.0"
-    hooks:
-      - id: terraform-docs-system
+        name: "Markdown Lint"
