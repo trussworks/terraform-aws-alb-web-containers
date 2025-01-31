@@ -22,6 +22,7 @@ repos:
         name: "EOF Fixer"
       - id: mixed-line-ending
         name: "Mixed Line Ending"
+        args: ["--fix=no"]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.31.1
@@ -46,6 +47,7 @@ repos:
     hooks:
       - id: terraform-docs-system
         name: "Terraform Docs"
+        args: ["-c", ".terraform-docs.yml", "."]
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.17.2
