@@ -94,14 +94,14 @@ module "app_alb" {
 
 | Name | Version |
 |------|---------|
-| aws | >= 5.0 |
+| aws | ~> 5.0 |
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | terraform | >= 1.0 |
-| aws | >= 5.0 |
+| aws | ~> 5.0 |
 
 ## Resources
 
