@@ -47,7 +47,7 @@ module "app_alb" {
 | alb_idle_timeout | The time in seconds that the connection is allowed to be idle. | `number` | `60` | no |
 | alb_internal | If true, the ALB will be internal. Default's to false, the ALB will be public. | `string` | `false` | no |
 | alb_listener_certificate_arns | The ARNs of the additional certificates to be attached to the HTTPS Listener on the ALB. Does not replace the default certifcate on the listener. | `list(string)` | `[]` | no |
-| alb_ssl_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html | `string` | `"ELBSecurityPolicy-TLS13-1-2-2021-06"` | no |
+| alb_ssl_policy | The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See [https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html) | `string` | `"ELBSecurityPolicy-TLS13-1-2-2021-06"` | no |
 | allow_public_http | Allow inbound access from the Internet to port 80. | `string` | `true` | no |
 | allow_public_https | Allow inbound access from the Internet to port 443. | `string` | `true` | no |
 | container_port | The port on which the container will receive traffic. | `string` | `443` | no |

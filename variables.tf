@@ -28,7 +28,7 @@ variable "alb_listener_certificate_arns" {
 }
 
 variable "alb_ssl_policy" {
-  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
+  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See [https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)"
   type        = string
   default     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 }
