@@ -6,6 +6,11 @@ target_lock:
   		-platform=darwin_arm64 \
   		-platform=linux_amd64
 
+.PHONY: check
+check:
+	tflint
+	trivy config .
+
 .PHONY: docs
 docs:
 	terraform-docs -c .terraform-docs.yml .
