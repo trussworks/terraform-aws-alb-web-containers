@@ -47,7 +47,6 @@ repos:
     hooks:
       - id: terraform-docs-system
         name: "Terraform Docs"
-        args: ["-c", ".terraform-docs.yml", "."]
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.17.2
