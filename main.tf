@@ -1,9 +1,9 @@
 #
-# SG - ALB
+# Security Group - ALB
 #
 
 resource "aws_security_group" "alb" {
-  count = var.security_group == "" ? 1 : 0
+  count = var.security_group == null ? 1 : 0
 
   name        = "alb-${var.name}-${var.environment}"
   description = "${var.name}-${var.environment} ALB security group"
@@ -15,41 +15,42 @@ resource "aws_security_group" "alb" {
 }
 
 locals {
-  security_group = var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group
+  security_group  = var.security_group == null ? [aws_security_group.alb[0].id] : [var.security_group]
+  security_groups = var.additional_security_groups == null ? local.security_group : concat(var.additional_security_groups, local.security_group)
 }
 
 resource "aws_vpc_security_group_egress_rule" "alb_allow_outbound" {
-  count = var.security_group == "" ? 1 : 0
+  count = var.security_group == null ? 1 : 0
 
-  description       = "Allow all outbound"
-  security_group_id = aws_security_group.alb_sg[0].id
+  description       = "Allow All Outbound."
+  security_group_id = aws_security_group.alb[0].id
 
   ip_protocol = "-1"
-  cidr_ipv4   = ["0.0.0.0/0"]
+  cidr_ipv4   = "0.0.0.0/0"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_allow_https" {
-  count = var.security_group == "" && var.allow_public_https ? 1 : 0
+  count = var.security_group == null && var.allow_public_https ? 1 : 0
 
-  description       = "Allow all HTTPS"
-  security_group_id = aws_security_group.alb_sg[0].id
+  description       = "Allow All HTTPS."
+  security_group_id = aws_security_group.alb[0].id
 
   from_port   = 443
   to_port     = 443
   ip_protocol = "tcp"
-  cidr_ipv4   = ["0.0.0.0/0"]
+  cidr_ipv4   = "0.0.0.0/0"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
-  count = var.security_group == "" && var.allow_public_http ? 1 : 0
+  count = var.security_group == null && var.allow_public_http ? 1 : 0
 
-  description       = "Allow all HTTP"
-  security_group_id = aws_security_group.alb_sg[0].id
+  description       = "Allow All HTTP."
+  security_group_id = aws_security_group.alb[0].id
 
   from_port   = 80
   to_port     = 80
   ip_protocol = "tcp"
-  cidr_ipv4   = ["0.0.0.0/0"]
+  cidr_ipv4   = "0.0.0.0/0"
 }
 
 #
@@ -58,12 +59,12 @@ resource "aws_vpc_security_group_ingress_rule" "alb_allow_http" {
 
 resource "aws_lb" "main" {
   name                       = "${var.name}-${var.environment}"
-  drop_invalid_header_fields = true
+  drop_invalid_header_fields = var.drop_invalid_header_fields
   enable_waf_fail_open       = var.enable_waf_fail_open
   internal                   = var.alb_internal
   preserve_host_header       = var.preserve_host_header
   subnets                    = var.alb_subnet_ids
-  security_groups            = [local.security_group]
+  security_groups            = local.security_groups
   idle_timeout               = var.alb_idle_timeout
   desync_mitigation_mode     = var.desync_mitigation_mode
 
@@ -73,7 +74,7 @@ resource "aws_lb" "main" {
     # Skips creating the block if logs_s3_bucket is empty string
     for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
     content {
-      enabled = var.access_logs
+      enabled = var.enable_access_logs
       bucket  = var.logs_s3_bucket
       prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
     }
@@ -82,13 +83,17 @@ resource "aws_lb" "main" {
   dynamic "connection_logs" {
     for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
     content {
-      enabled = var.connection_logs
+      enabled = var.enable_connection_logs
       bucket  = var.logs_s3_bucket
       prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
     }
   }
 
 }
+
+#
+# ALB Target Groups
+#
 
 resource "aws_lb_target_group" "https" {
   # Name must be less than or equal to 32 characters, or AWS API returns error.
@@ -121,6 +126,10 @@ resource "aws_lb_target_group" "https" {
 
 }
 
+#
+# ALB Listeners
+#
+
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
   port              = "80"
@@ -151,7 +160,7 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener_certificate" "main" {
-  count           = length(var.alb_certificate_arns)
+  count           = length(var.alb_listener_certificate_arns)
   listener_arn    = aws_lb_listener.https.arn
-  certificate_arn = element(var.alb_certificate_arns, count.index)
+  certificate_arn = element(var.alb_listener_certificate_arns, count.index)
 }

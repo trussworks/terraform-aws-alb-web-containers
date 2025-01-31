@@ -1,13 +1,7 @@
-variable "access_logs" {
-  description = "Enable Access Logs"
-  type        = bool
-  default     = false
-}
-
-variable "alb_certificate_arns" {
-  description = "The ARNs of the certificates to be attached to the ALB."
+variable "additional_security_groups" {
+  description = "A list of additional Security Groups to attach to the ALB."
   type        = list(string)
-  default     = []
+  default     = null
 }
 
 variable "alb_default_certificate_arn" {
@@ -27,6 +21,12 @@ variable "alb_internal" {
   default     = false
 }
 
+variable "alb_listener_certificate_arns" {
+  description = "The ARNs of the additional certificates to be attached to the HTTPS Listener on the ALB. Does not replace the default certifcate on the listener."
+  type        = list(string)
+  default     = []
+}
+
 variable "alb_ssl_policy" {
   description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
   type        = string
@@ -44,21 +44,15 @@ variable "alb_vpc_id" {
 }
 
 variable "allow_public_http" {
-  description = "Allow inbound access from the Internet to port 80"
+  description = "Allow inbound access from the Internet to port 80."
   type        = string
   default     = true
 }
 
 variable "allow_public_https" {
-  description = "Allow inbound access from the Internet to port 443"
+  description = "Allow inbound access from the Internet to port 443."
   type        = string
   default     = true
-}
-
-variable "connection_logs" {
-  description = "Enable Connection Logs"
-  type        = bool
-  default     = false
 }
 
 variable "container_port" {
@@ -91,8 +85,26 @@ variable "desync_mitigation_mode" {
   default     = "defensive"
 }
 
+variable "drop_invalid_header_fields" {
+  description = "Whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is true. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens."
+  type        = bool
+  default     = true
+}
+
+variable "enable_access_logs" {
+  description = "Enable ALB Access Logs."
+  type        = bool
+  default     = false
+}
+
+variable "enable_connection_logs" {
+  description = "Enable ALB Connection Logs."
+  type        = bool
+  default     = false
+}
+
 variable "enable_deletion_protection" {
-  description = " If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer"
+  description = " If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancera."
   type        = bool
   default     = false
 }
@@ -147,6 +159,7 @@ variable "load_balancing_algorithm_type" {
 variable "logs_s3_bucket" {
   description = "S3 bucket for storing access logs. Set to empty string to disable logs."
   type        = string
+  default     = null
 }
 
 variable "logs_s3_prefix" {
@@ -167,15 +180,15 @@ variable "name" {
 }
 
 variable "preserve_host_header" {
-  description = "Whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change. Defaults to false."
+  description = "Whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change."
   type        = bool
   default     = false
 }
 
 variable "security_group" {
-  description = "SG for the ALB"
+  description = "User-defined Security Group for the ALB. Defining a Security Group here will cause the module to not create a Security Group for the ALB."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "security_group_tags" {
