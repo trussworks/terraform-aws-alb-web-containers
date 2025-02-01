@@ -42,7 +42,7 @@ content: |-
   ***
 
 output:
-  file: "README.md"
+  file: README.md
   mode: inject
   template: |-
     <!-- BEGIN_TF_DOCS -->
