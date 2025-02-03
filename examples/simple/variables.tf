@@ -1,15 +1,14 @@
 variable "logs_bucket" {
-  type = string
+  description = "S3 Log Bucket Name"
+  type        = string
 }
 
 variable "region" {
-  type = string
+  description = "AWS Region to provison resources"
+  type        = string
 }
 
 variable "test_name" {
-  type = string
-}
-
-variable "vpc_azs" {
-  type = list(string)
+  description = "App Name"
+  type        = string
 }

@@ -1,19 +1,19 @@
 variable "logs_bucket" {
-  type = string
+  description = "S3 Log Bucket to Log to."
+  type        = string
 }
 
 variable "logs_prefix" {
-  type = string
+  description = "Prefix to attach to log ouptput. Typically 's3/<name>'."
+  type        = string
 }
 
 variable "region" {
-  type = string
+  description = "AWS Region"
+  type        = string
 }
 
 variable "test_name" {
-  type = string
-}
-
-variable "vpc_azs" {
-  type = list(string)
+  description = "App Name"
+  type        = string
 }

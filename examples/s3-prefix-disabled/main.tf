@@ -17,7 +17,7 @@ module "alb" {
 
   alb_vpc_id                  = module.vpc.vpc_id
   alb_subnet_ids              = module.vpc.public_subnets
-  alb_default_certificate_arn = module.acm-cert.acm_arn
+  alb_default_certificate_arn = module.acm_cert.acm_arn
 
   container_port     = local.container_port
   container_protocol = local.container_protocol
@@ -37,7 +37,7 @@ module "logs" {
   ]
 }
 
-module "acm-cert" {
+module "acm_cert" {
   source  = "trussworks/acm-cert/aws"
   version = "~> 7"
 
@@ -58,7 +58,8 @@ resource "aws_route53_record" "main" {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5"
 
   name = "my-vpc"
   cidr = "10.0.0.0/16"
@@ -135,7 +136,7 @@ resource "aws_ecs_cluster" "main" {
   name = var.test_name
 }
 
-module "ecs-service" {
+module "ecs_service" {
   source  = "trussworks/ecs-service/aws"
   version = "~> 5"
 
