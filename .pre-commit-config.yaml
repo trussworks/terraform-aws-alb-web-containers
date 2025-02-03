@@ -1,40 +1,67 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
       - id: check-json
-      - id: check-merge-conflict
+        name: "Check JSON"
       - id: check-yaml
-      - id: detect-private-key
+        name: "Check YAML"
+        args:
+          - --allow-multiple-documents
+      - id: check-merge-conflict
+        name: "Check Merge Conflicts"
       - id: pretty-format-json
+        name: "Pretty Format JSON"
         args:
           - --autofix
       - id: trailing-whitespace
-      - id: check-symlinks
+        name: "Trailing Whitespace"
+        args:
+          - --markdown-linebreak-ext=md
       - id: end-of-file-fixer
+        name: "EOF Fixer"
       - id: mixed-line-ending
+        name: "Mixed Line Ending"
+        args: ["--fix=no"]
 
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.31.1
     hooks:
-      - id: mdformat
-        additional_dependencies:
-          - mdformat-gfm
-          - mdformat-toc
-        # mdformat fights with terraform_docs
-        exclude: README.m(ark)?d(own)?
-
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.33.0
-    hooks:
-      - id: markdownlint
-
-  - repo: https://github.com/detailyang/pre-commit-shell
-    rev: 1.0.5
-    hooks:
-      - id: shell-lint
+      - id: check-renovate
+      - id: check-github-workflows
+      - id: check-jsonschema
+        name: "Validate Pre-Commit"
+        files: ^\.pre-commit-config.yaml+$
+        types:
+          - yaml
+        args: ["--schemafile", "schemas/pre-commit-config.json"]
+      - id: check-jsonschema
+        name: "Validate MarkdownLint"
+        files: ^\.markdownlint.yml+$
+        types:
+          - yaml
+        args: ["--schemafile", "schemas/markdownlint-config-schema.json"]
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.80.0
+    rev: v1.97.0
     hooks:
+      - id: terraform_validate
+        name: "Terraform Validate"
       - id: terraform_fmt
+        name: "Terraform Format"
+      - id: terraform_tflint
+        name: "Terraform Lint"
+        args:
+          - --args=--config=__GIT_WORKING_DIR__.tflint.hcl
+
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.19.0
+    hooks:
+      - id: terraform-docs-system
+        name: "Terraform Docs"
+
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.2
+    hooks:
+      - id: markdownlint-cli2
+        name: "Markdown Lint"

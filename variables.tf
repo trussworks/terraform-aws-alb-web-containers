@@ -1,5 +1,11 @@
+variable "additional_security_groups" {
+  description = "A list of additional Security Groups to attach to the ALB."
+  type        = list(string)
+  default     = null
+}
+
 variable "alb_certificate_arns" {
-  description = "The ARNs of the certificates to be attached to the ALB."
+  description = "The ARNs of the additional certificates to be attached to the HTTPS Listener on the ALB. Does not replace the default certifcate on the listener (`var.alb_default_certificate_arn`)."
   type        = list(string)
   default     = []
 }
@@ -22,9 +28,9 @@ variable "alb_internal" {
 }
 
 variable "alb_ssl_policy" {
-  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies>."
+  description = "The SSL policy (aka security policy) for the Application Load Balancer that specifies the TLS protocols and ciphers allowed.  See [https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)"
   type        = string
-  default     = "ELBSecurityPolicy-2016-08"
+  default     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 }
 
 variable "alb_subnet_ids" {
@@ -38,13 +44,13 @@ variable "alb_vpc_id" {
 }
 
 variable "allow_public_http" {
-  description = "Allow inbound access from the Internet to port 80"
+  description = "Allow inbound access from the Internet to port 80."
   type        = string
   default     = true
 }
 
 variable "allow_public_https" {
-  description = "Allow inbound access from the Internet to port 443"
+  description = "Allow inbound access from the Internet to port 443."
   type        = string
   default     = true
 }
@@ -74,14 +80,38 @@ variable "deregistration_delay" {
 }
 
 variable "desync_mitigation_mode" {
-  description = "Specifies how the load balancer handles security issues related to HTTP desync"
+  description = "How the load balancer handles requests that might pose a security risk to an application due to HTTP desync. Valid values are monitor, defensive (default), strictest."
   type        = string
   default     = "defensive"
 }
 
+variable "drop_invalid_header_fields" {
+  description = "Whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is true. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens."
+  type        = bool
+  default     = true
+}
+
+variable "enable_access_logs" {
+  description = "Enable ALB Access Logs."
+  type        = bool
+  default     = false
+}
+
+variable "enable_connection_logs" {
+  description = "Enable ALB Connection Logs."
+  type        = bool
+  default     = false
+}
+
 variable "enable_deletion_protection" {
-  description = " If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer"
-  type        = string
+  description = " If true, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancera."
+  type        = bool
+  default     = false
+}
+
+variable "enable_waf_fail_open" {
+  description = "Whether to allow a WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. Defaults to false."
+  type        = bool
   default     = false
 }
 
@@ -127,8 +157,9 @@ variable "load_balancing_algorithm_type" {
 }
 
 variable "logs_s3_bucket" {
-  description = "S3 bucket for storing access logs. Set to empty string to disable logs."
+  description = "S3 bucket for storing access logs."
   type        = string
+  default     = null
 }
 
 variable "logs_s3_prefix" {
@@ -148,10 +179,16 @@ variable "name" {
   type        = string
 }
 
+variable "preserve_host_header" {
+  description = "Whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change."
+  type        = bool
+  default     = false
+}
+
 variable "security_group" {
-  description = "SG for the ALB"
+  description = "User-defined Security Group for the ALB. Defining a Security Group here will cause the module to not create a Security Group for the ALB."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "security_group_tags" {
@@ -167,7 +204,7 @@ variable "slow_start" {
 }
 
 variable "target_group_name" {
-  description = "Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: ecs-[name]-[environment]-[protocol]."
+  description = "Override the default name of the ALB's target group. Must be less than or equal to 32 characters. Default: `ecs-[name]-[environment]-HTTPS`."
   type        = string
   default     = ""
 }

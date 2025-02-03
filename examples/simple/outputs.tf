@@ -1,3 +1,4 @@
 output "dns_endpoint" {
-  value = "${var.test_name}.${local.zone_name}"
+  description = "DNS Endpoint"
+  value       = "${var.test_name}.${local.zone_name}"
 }

@@ -1,9 +1,9 @@
 #
-# SG - ALB
+# Security Group - ALB
 #
 
 resource "aws_security_group" "alb_sg" {
-  count = var.security_group == "" ? 1 : 0
+  count = var.security_group == null ? 1 : 0
 
   name        = "alb-${var.name}-${var.environment}"
   description = "${var.name}-${var.environment} ALB security group"
@@ -15,7 +15,8 @@ resource "aws_security_group" "alb_sg" {
 }
 
 locals {
-  security_group = var.security_group == "" ? aws_security_group.alb_sg[0].id : var.security_group
+  security_group  = var.security_group == null ? [aws_security_group.alb_sg[0].id] : [var.security_group]
+  security_groups = var.additional_security_groups == null ? local.security_group : concat(var.additional_security_groups, local.security_group)
 }
 
 resource "aws_security_group_rule" "app_alb_allow_outbound" {
@@ -62,12 +63,15 @@ resource "aws_security_group_rule" "app_alb_allow_http_from_world" {
 #
 
 resource "aws_lb" "main" {
-  name                   = "${var.name}-${var.environment}"
-  internal               = var.alb_internal
-  subnets                = var.alb_subnet_ids
-  security_groups        = [local.security_group]
-  idle_timeout           = var.alb_idle_timeout
-  desync_mitigation_mode = var.desync_mitigation_mode
+  name                       = "${var.environment}-${var.name}"
+  drop_invalid_header_fields = var.drop_invalid_header_fields
+  enable_waf_fail_open       = var.enable_waf_fail_open
+  internal                   = var.alb_internal
+  preserve_host_header       = var.preserve_host_header
+  subnets                    = var.alb_subnet_ids
+  security_groups            = local.security_groups
+  idle_timeout               = var.alb_idle_timeout
+  desync_mitigation_mode     = var.desync_mitigation_mode
 
   enable_deletion_protection = var.enable_deletion_protection
 
@@ -75,7 +79,16 @@ resource "aws_lb" "main" {
     # Skips creating the block if logs_s3_bucket is empty string
     for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
     content {
-      enabled = true
+      enabled = var.enable_access_logs
+      bucket  = var.logs_s3_bucket
+      prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
+    }
+  }
+
+  dynamic "connection_logs" {
+    for_each = var.logs_s3_bucket == "" ? [] : ["create block"]
+    content {
+      enabled = var.enable_connection_logs
       bucket  = var.logs_s3_bucket
       prefix  = var.logs_s3_prefix_enabled == true ? (var.logs_s3_prefix == "" ? "alb/${var.name}-${var.environment}" : var.logs_s3_prefix) : ""
     }
@@ -83,10 +96,14 @@ resource "aws_lb" "main" {
 
 }
 
+#
+# ALB Target Groups
+#
+
 resource "aws_lb_target_group" "https" {
   # Name must be less than or equal to 32 characters, or AWS API returns error.
   # Error: "name" cannot be longer than 32 characters
-  name             = coalesce(var.target_group_name, format("ecs-%s-%s-https", var.name, var.environment))
+  name             = coalesce(var.target_group_name, format("%s-%s-ecs-https", var.environment, var.name))
   port             = var.container_port
   protocol         = var.container_protocol
   protocol_version = var.container_protocol_version
@@ -113,6 +130,10 @@ resource "aws_lb_target_group" "https" {
   depends_on = [aws_lb.main]
 
 }
+
+#
+# ALB Listeners
+#
 
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
